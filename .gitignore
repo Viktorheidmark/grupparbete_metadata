@@ -1,16 +1,16 @@
-# IGNORE node_modules - since it is recreated for everyone by just writing npm install
-# and its big and can differ for some modules between operating systems
-node_modules
+# Node modules
+node_modules/
 
-# IGNORE db-credentials since it's a MAJOR security risk to have them public on git-hub!
+# Miljöfiler (lösenord, API-nycklar osv)
+.env
 db-credentials.js
 
-# Also ignore folders with files (pdf, mp3, jpg, ppt etc in frontend)
-# for example:
-frontend/pdfs
-frontend/music
-frontend/photos
-frontend/powerpoint
+# Testdata (bilder, pdf, mp3, ppt osv)
+data/
 
-# Ignore specials system files of no use for example .DS_Store on mac
+# Loggar
+*.log
+
+# OS-specifika filer
 .DS_Store
+Thumbs.db
