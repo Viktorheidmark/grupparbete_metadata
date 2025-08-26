@@ -1,18 +1,18 @@
-// Import file system & path
+// import-json-to-db.js
+// Importerar bilder från data/bilder till `files` + `metadata`
+// Fyller hash, created_at, modified_at och ev. GPS (lat/lng)
+
 import fs from 'fs';
 import path from 'path';
-
-// Import DB-driver
+import crypto from 'crypto';
 import mysql from 'mysql2/promise';
-
-// ExifTool för metadata
 import { exiftool } from 'exiftool-vendored';
 
 // ---- 1) Konfiguration ----
 const FOLDER = 'data/bilder'; // din bildmapp
 const exts = new Set(['.jpg', '.jpeg', '.png', '.heic', '.tif', '.tiff']);
 
-// ---- 2) Anslut till databasen (samma struktur som ditt exempel) ----
+// ---- 2) Anslut till databasen ----
 const db = await mysql.createConnection({
   host: '5.189.183.23',
   port: 4567,
@@ -37,7 +37,18 @@ function mimeFromExt(ext) {
   return 'application/octet-stream';
 }
 
-// Försök tolka tal & datum
+// Beräkna SHA-256-hash av fil (streamad)
+function hashFileSha256(absPath) {
+  return new Promise((resolve, reject) => {
+    const h = crypto.createHash('sha256');
+    const s = fs.createReadStream(absPath);
+    s.on('data', chunk => h.update(chunk));
+    s.on('error', reject);
+    s.on('end', () => resolve(h.digest('hex')));
+  });
+}
+
+// Försök tolka tal & datum till metadata-tabellen
 function parseValueHelpers(v) {
   if (v == null) return { value: null, value_num: null, value_date: null };
   const value = Array.isArray(v) ? v.join(', ') : String(v);
@@ -63,6 +74,7 @@ const imageFiles = filesInFolder.filter(f => exts.has(path.extname(f).toLowerCas
 
 if (imageFiles.length === 0) {
   console.log(`Inga bildfiler hittades i ${FOLDER}`);
+  await db.end();
   process.exit(0);
 }
 
@@ -75,12 +87,23 @@ for (const file of imageFiles) {
     const ext = path.extname(file).slice(1);      // ex: "jpg"
     const mime = mimeFromExt('.' + ext);
 
-    // ---- 4) Lägg in i files (upsert via UNIQUE path(191)) ----
+    // NYTT: hash + created/modified
+    const hash = await hashFileSha256(abs);
+    const createdAt = stat.birthtime; // filens skapad-datum
+    const modifiedAt = stat.mtime;    // filens senaste ändring
+
+    // ---- 4) Lägg in i files (upsert) och fyll hash/datum ----
     await query(
-      `INSERT INTO files (path, filename, ext, mime, size, filetype, modified_at)
-       VALUES (?, ?, ?, ?, ?, 'image', NOW())
-       ON DUPLICATE KEY UPDATE size=VALUES(size), mime=VALUES(mime), modified_at=VALUES(modified_at), filetype='image'`,
-      [relPath, file, ext, mime, stat.size]
+      `INSERT INTO files (path, filename, ext, mime, size, hash, created_at, modified_at, filetype)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'image')
+       ON DUPLICATE KEY UPDATE
+         size=VALUES(size),
+         mime=VALUES(mime),
+         hash=VALUES(hash),
+         created_at=VALUES(created_at),
+         modified_at=VALUES(modified_at),
+         filetype='image'`,
+      [relPath, file, ext, mime, stat.size, hash, createdAt, modifiedAt]
     );
 
     // Hämta id (om den redan fanns)
@@ -126,4 +149,4 @@ for (const file of imageFiles) {
 // Stäng ExifTool & DB
 await exiftool.end();
 await db.end();
-console.log('✅ Klart! Alla bilder i', FOLDER, 'har importerats.');
+console.log('✅ Klart! Alla bilder i', FOLDER, 'har importerats med hash/datum och ev. GPS.');
