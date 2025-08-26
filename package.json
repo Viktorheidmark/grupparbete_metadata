@@ -13,5 +13,13 @@
     "express": "^5.1.0",
     "mysql2": "^3.14.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viktorheidmark/grupparbete_metadata.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Viktorheidmark/grupparbete_metadata/issues"
+  },
+  "homepage": "https://github.com/Viktorheidmark/grupparbete_metadata#readme",
   "description": ""
 }
