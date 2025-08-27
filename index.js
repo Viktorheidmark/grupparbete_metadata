@@ -42,12 +42,8 @@ app.get("/api/files/:id/metadata", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-// Start the web server at port 3000
-app.listen(3000, () => console.log('Listening on http://localhost:3000'));
-=======
+// Start the web server at port 3010
 const PORT = 3010;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
->>>>>>> d24ee3a076b71a64d1c9f54af01f84d80fffd488
