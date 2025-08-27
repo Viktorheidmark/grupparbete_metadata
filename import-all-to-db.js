@@ -168,4 +168,4 @@ for (const g of GROUPS){
 
 await exiftool.end();
 await db.end();
-console.log(`\n✅ Klart! Importerade totalt ${imported} filer från ${ROOT}.`);
+console.log(`\n Klart! Importerade totalt ${imported} filer från ${ROOT}.`);
