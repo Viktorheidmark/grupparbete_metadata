@@ -2,13 +2,15 @@
   "name": "connect-mysql-example",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "import": "node import-all-files-to-db.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
     "exifr": "^7.1.3",

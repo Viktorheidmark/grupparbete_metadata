@@ -14,16 +14,13 @@ const GROUPS = [
   { sub: "powerpoints", type: "ppt",   exts: [".ppt",".pptx"] },
 ];
 
-// Skapa connection mha extern config
 const db = await mysql.createConnection(dbConfig);
 
-// Enkel query-helper (som i mallen)
 async function query(sql, vals) {
   const [rows] = await db.execute(sql, vals);
   return rows;
 }
 
-// Minimal MIME-mappning
 function mimeFromExt(ext) {
   const e = ext.toLowerCase();
   if (e===".jpg"||e===".jpeg") return "image/jpeg";
@@ -43,7 +40,6 @@ function mimeFromExt(ext) {
   return "application/octet-stream";
 }
 
-// Ström-hash (minnessnålt)
 function sha256(absPath) {
   return new Promise((res, rej) => {
     const h = crypto.createHash("sha256");
@@ -54,27 +50,20 @@ function sha256(absPath) {
   });
 }
 
-// En SUPERENKEL normalisering: försök plocka ut tal eller datum
 function toTriplet(raw) {
   if (raw == null) return { value_text: null, value_num: null, value_date: null };
   const value_text = Array.isArray(raw) ? raw.join(", ") : String(raw);
-
-  // Försök siffra
   const n = Number(value_text);
   const value_num = Number.isFinite(n) ? n : null;
-
-  // Försök datum: EXIF "YYYY:MM:DD..." eller ISO "YYYY-MM-DD..."
   let value_date = null;
   if (/^\d{4}(:|-)\d{2}(:|-)\d{2}/.test(value_text)) {
     const isoish = value_text.replace(/^(\d{4}):(\d{2}):/, "$1-$2-").replace(" ", "T");
     const d = new Date(isoish);
     if (!Number.isNaN(d.getTime())) value_date = d;
   }
-
   return { value_text, value_num, value_date };
 }
 
-// Vilka nycklar vi bryr oss om (lagom lista för sök)
 const KEYS_COMMON = ["FileType","MIMEType","CreateDate","ModifyDate","Title","Author","Keywords"];
 const KEYS_IMAGE  = ["ImageWidth","ImageHeight","Megapixels","Make","Model","GPSLatitude","GPSLongitude"];
 const KEYS_AUDIO  = ["Artist","Album","Genre","Composer","Track","TrackNumber","Year","Duration","Bitrate","SampleRate","Channels","ChannelMode","Encoder","AudioFormat"];
@@ -119,14 +108,11 @@ for (const g of GROUPS) {
       const createdAt = st.birthtime;
       const modifiedAt = st.mtime;
 
-      // Läs all metadata
       const meta = await exiftool.read(abs);
 
-      // Ev GPS till files
       const lat = (g.type==="image" && meta.GPSLatitude  != null) ? meta.GPSLatitude  : null;
       const lng = (g.type==="image" && meta.GPSLongitude != null) ? meta.GPSLongitude : null;
 
-      // ⚠️ Smidigt "LAST_INSERT_ID"-trick:
       const res = await query(`
         INSERT INTO files
           (path, filename, ext, mime, size, hash, created_at, modified_at, filetype, lat, lng)
@@ -149,12 +135,10 @@ for (const g of GROUPS) {
 
       const fileId = res.insertId;
 
-      // Spara valda nycklar i metadata (UPsert per nyckel)
       const keys = keysFor(g.type);
       for (const k of keys) {
         if (meta[k] == null) continue;
         const { value_text, value_num, value_date } = toTriplet(meta[k]);
-
         await query(`
           INSERT INTO metadata (file_id, \`key\`, value_text, value_num, value_date)
           VALUES (?, ?, ?, ?, ?)
