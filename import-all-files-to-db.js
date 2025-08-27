@@ -1,5 +1,4 @@
-// import-all-simple-2tables.js
-// Enkel tvåtabells-import: `files` (en rad per fil) + `metadata` (en rad per nyckel)
+
 
 import fs from "fs";
 import path from "path";
