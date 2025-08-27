@@ -1,40 +1,48 @@
-// Import the git-ignored db credentials
-import dbCreds from './db-credentials.js';
+import express from "express";
+import mysql from "mysql2/promise";
+import dbCredentials from "./db-credentials.js";
 
-// Get the database driver
-import mysql from 'mysql2/promise';
+// anslut till databasen
+const db = await mysql.createConnection(dbCredentials);
 
-// Get express so that we can create a web server
-import express from 'express';
-
-// Create the connection to database
-const db = await mysql.createConnection(dbCreds);
-
-// Allow named placeholders in prepared statements
-db.config.namedPlaceholders = true;
-
-// Create a web server called app
+// skapa en express-app
 const app = express();
 
-// Create a REST route
-app.get('/api/search-by-firstname/:firstName', async (request, response) => {
-  // Read the request parameter firstName
-  let { firstName } = request.params;
-  // Add a wildcard for LIKE searches in the db
-  firstName = '%' + firstName + '%';
-  // Make a query as a prepared statement
-  const [rows] = await db.execute(`
-  SELECT *
-  FROM users
-  WHERE firstName LIKE :firstName`,
-    { firstName }
-  );
-  // Send the data as json response
-  response.json(rows);
+// enkel test-route: lista de senaste 10 filerna
+app.get("/api/files", async (req, res) => {
+  try {
+    const [rows] = await db.execute(`
+      SELECT id, filename, filetype, created_at, modified_at
+      FROM files
+      ORDER BY id DESC
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error("DB error:", err.message);
+    res.status(500).json({ error: "Database query failed" });
+  }
 });
 
-// Let Express serve all the content from frontend folder
-app.use(express.static('frontend'));
+// route för metadata till en specifik fil
+app.get("/api/files/:id/metadata", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await db.execute(`
+      SELECT \`key\`, value_text, value_num, value_date
+      FROM metadata
+      WHERE file_id = ?
+      ORDER BY \`key\` ASC
+    `, [id]);
+    res.json(rows);
+  } catch (err) {
+    console.error("DB error:", err.message);
+    res.status(500).json({ error: "Database query failed" });
+  }
+});
 
-// Start the web server at port 3000
-app.listen(3000, () => console.log('Listening on http://localhost:3000'));
+// starta servern på en egen port (t.ex. 3010)
+const PORT = 3010;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
