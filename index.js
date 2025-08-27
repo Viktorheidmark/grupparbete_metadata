@@ -37,4 +37,4 @@ app.get('/api/search-by-firstname/:firstName', async (request, response) => {
 app.use(express.static('frontend'));
 
 // Start the web server at port 3000
-app.listen(3010, () => console.log('Listening on http://localhost:3010'));
+app.listen(3000, () => console.log('Listening on http://localhost:3000'));
