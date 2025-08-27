@@ -1,10 +1,9 @@
-
-
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import mysql from "mysql2/promise";
 import { exiftool } from "exiftool-vendored";
+import dbConfig from "./db-credentials.js";
 
 // ---- Konfig ----
 const ROOT = "data";
@@ -15,14 +14,8 @@ const GROUPS = [
   { sub: "powerpoints", type: "ppt",   exts: [".ppt",".pptx"] },
 ];
 
-// (lägg helst dessa i .env)
-const db = await mysql.createConnection({
-  host: "5.189.183.23",
-  port: 4567,
-  user: "dm24-sthm-grupp3",
-  password: "YFTJJ88469",
-  database: "dm24-sthm-grupp3",
-});
+// Skapa connection mha extern config
+const db = await mysql.createConnection(dbConfig);
 
 // Enkel query-helper (som i mallen)
 async function query(sql, vals) {
@@ -134,8 +127,6 @@ for (const g of GROUPS) {
       const lng = (g.type==="image" && meta.GPSLongitude != null) ? meta.GPSLongitude : null;
 
       // ⚠️ Smidigt "LAST_INSERT_ID"-trick:
-      // Sätt id=LAST_INSERT_ID(id) i UPDATE-delen så får vi filens ID från rows.insertId,
-      // oavsett om det blev INSERT eller DUPLICATE UPDATE.
       const res = await query(`
         INSERT INTO files
           (path, filename, ext, mime, size, hash, created_at, modified_at, filetype, lat, lng)
@@ -156,7 +147,7 @@ for (const g of GROUPS) {
         relPath, name, ext.slice(1), mime, st.size, hash, createdAt, modifiedAt, g.type, lat, lng
       ]);
 
-      const fileId = res.insertId; // funkar både på ny insert och på duplicate update
+      const fileId = res.insertId;
 
       // Spara valda nycklar i metadata (UPsert per nyckel)
       const keys = keysFor(g.type);
