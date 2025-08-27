@@ -1,14 +1,14 @@
 import express from "express";
 import mysql from "mysql2/promise";
-import dbCredentials from "./db-credentials.js";
+import dbConfig from "./db-credentials.js";
 
-// anslut till databasen
-const db = await mysql.createConnection(dbCredentials);
-
-// skapa en express-app
+const db = await mysql.createConnection(dbConfig);
 const app = express();
 
-// enkel test-route: lista de senaste 10 filerna
+// test
+app.get("/api/ping", (req, res) => res.json({ ok: true, time: new Date() }));
+
+// senaste 10 filer
 app.get("/api/files", async (req, res) => {
   try {
     const [rows] = await db.execute(`
@@ -24,16 +24,17 @@ app.get("/api/files", async (req, res) => {
   }
 });
 
-// route för metadata till en specifik fil
+// metadata för en viss fil
 app.get("/api/files/:id/metadata", async (req, res) => {
   try {
     const { id } = req.params;
-    const [rows] = await db.execute(`
-      SELECT \`key\`, value_text, value_num, value_date
-      FROM metadata
-      WHERE file_id = ?
-      ORDER BY \`key\` ASC
-    `, [id]);
+    const [rows] = await db.execute(
+      `SELECT \`key\`, value_text, value_num, value_date
+       FROM metadata
+       WHERE file_id = ?
+       ORDER BY \`key\` ASC`,
+      [id]
+    );
     res.json(rows);
   } catch (err) {
     console.error("DB error:", err.message);
@@ -41,7 +42,6 @@ app.get("/api/files/:id/metadata", async (req, res) => {
   }
 });
 
-// starta servern på en egen port (t.ex. 3010)
 const PORT = 3010;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
