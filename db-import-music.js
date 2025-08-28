@@ -28,4 +28,4 @@ for (let file of files) {
 
 // Exit process when import is done
 console.log('All metadata imported!');
-process.exit();
+process.exit(); 

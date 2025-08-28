@@ -23,7 +23,7 @@ async function main() {
     let [result] = await db.execute(`
       INSERT INTO pdf (meta)
       VALUES(?)
-    `, [JSON.stringify(cleaned)]);
+    `, [cleaned]);
     console.log(file, result);
   }
 
