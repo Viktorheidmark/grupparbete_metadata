@@ -1,5 +1,5 @@
 import fs from 'fs';
-import * as pdfMetadata from 'pdf-metadata';
+import pdfParse from 'pdf-parse-fork';
 import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
 
@@ -15,15 +15,12 @@ async function main() {
 
   for (let file of files) {
     // get all metadata
-    let metadata = await pdfMetadata.parseFile('./frontend/data/pdf/' + file);
-    // create cleaned up version with filename + metadata
-    let cleaned = { file, common: metadata.common, format: metadata.format };
-
+    let metadata = { fileName:file, ...(await pdfParse(fs.readFileSync('./frontend/data/pdf/' + file))) };
     // Spara som JSON-sträng
-    let [result] = await db.execute(`
+   let [result] = await db.execute(`
       INSERT INTO pdf (meta)
       VALUES(?)
-    `, [cleaned]);
+    `, [metadata]);
     console.log(file, result);
   }
 
