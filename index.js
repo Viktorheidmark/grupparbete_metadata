@@ -1,7 +1,7 @@
 import express from 'express';
 import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
-import setupMusicRestRoutes from './backend/music-rest-routes.js';
+import setupMusicRestRoutes from './music-rest-routes.js';
 
 // connect to db
 const db = await mysql.createConnection(dbCredentials);
