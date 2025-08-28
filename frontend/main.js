@@ -103,8 +103,8 @@ async function musicSearch() {
         <h2>${title || 'Okänd titel'}</h2>
         <p><b>Från albumet:</b> ${album || 'Okänt album'}</p>
         <p><b>Genre:</b> ${genre || 'Okänd genre'}</p>
-        <audio controls src="/music/${fileName}"></audio>
-        <p><a href="/music/${fileName}" download>Ladda ned filen</a></p>
+        <audio controls src="/data/music/${fileName}"></audio>
+        <p><a href="/data/music/${fileName}" download>Ladda ned filen</a></p>
         <p><button class="btn-show-all-music-metadata" data-id="${id}">Visa all metadata</button></p>
       </article>
     `;
