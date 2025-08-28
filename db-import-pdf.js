@@ -1,0 +1,35 @@
+import fs from 'fs';
+import * as pdfMetadata from 'pdf-metadata';
+import mysql from 'mysql2/promise';
+import dbCredentials from './db-credentials.js';
+
+async function main() {
+  // connect to db
+  const db = await mysql.createConnection(dbCredentials);
+
+  // read all files
+  const files = fs.readdirSync('./frontend/data/pdf');
+
+  // remove all posts from the musicMeta
+  await db.execute('DELETE FROM pdf');
+
+  for (let file of files) {
+    // get all metadata
+    let metadata = await pdfMetadata.parseFile('./frontend/data/pdf/' + file);
+    // create cleaned up version with filename + metadata
+    let cleaned = { file, common: metadata.common, format: metadata.format };
+
+    // Spara som JSON-sträng
+    let [result] = await db.execute(`
+      INSERT INTO pdf (meta)
+      VALUES(?)
+    `, [JSON.stringify(cleaned)]);
+    console.log(file, result);
+  }
+
+  // Exit process when import is done
+  console.log('All metadata imported!');
+  process.exit();
+}
+
+main();

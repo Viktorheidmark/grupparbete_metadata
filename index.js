@@ -1,27 +1,34 @@
-import express from "express";
-import mysql from "mysql2/promise";
-import dbConfig from "./db-credentials.js";
+import express from 'express';
+import mysql from 'mysql2/promise';
+import dbCredentials from './db-credentials.js';
 
-const db = await mysql.createConnection(dbConfig);
+// connect to db
+const db = await mysql.createConnection(dbCredentials);
+
+// create a web server - app
 const app = express();
 
-// test
-app.get("/api/ping", (req, res) => res.json({ ok: true, time: new Date() }));
-
-// senaste 10 filer
-app.get("/api/files", async (req, res) => {
-  try {
-    const [rows] = await db.execute(`
-      SELECT id, filename, filetype, created_at, modified_at
-      FROM files
-      ORDER BY id DESC
-      LIMIT 10
-    `);
-    res.json(rows);
-  } catch (err) {
-    console.error("DB error:", err.message);
-    res.status(500).json({ error: "Database query failed" });
+app.get('/api/music-search/:field/:searchValue', async (req, res) => {
+  // get field and searhValue from the request parameters
+  const { field, searchValue } = req.params;
+  // check that field is a valid field, if not do nothing
+  if (!['title', 'album', 'artist', 'genre'].includes(field)) {
+    res.json({ error: 'Invalid field name!' });
+    return;
   }
+  // run the db query as a prepared statement
+  const [result] = await db.execute(`
+    SELECT id,meta->>'$.file' AS fileName,
+      meta->>'$.common.title' AS title,
+      meta->>'$.common.artist' AS artist,
+      meta->>'$.common.album' AS album,
+      meta->>'$.common.genre' AS genre
+    FROM music
+    WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
+  `, ['%' + searchValue + '%']
+  );
+  // return the result as json
+  res.json(result);
 });
 
 // metadata för en viss fil
@@ -42,7 +49,6 @@ app.get("/api/files/:id/metadata", async (req, res) => {
   }
 });
 
-// Start the web server at port 3010
 const PORT = 3010;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
