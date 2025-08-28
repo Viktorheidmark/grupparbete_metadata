@@ -15,7 +15,7 @@ export default function setupMusicRestRoutes(app, db) {
       meta->>'$.common.artist' AS artist,
       meta->>'$.common.album' AS album,
       meta->>'$.common.genre' AS genre
-    FROM musicMeta
+    FROM music
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
     );
@@ -27,7 +27,7 @@ export default function setupMusicRestRoutes(app, db) {
   app.get('/api/music-all-meta/:id', async (req, res) => {
     const { id } = req.params;
     let [result] = await db.execute(`
-    SELECT * FROM musicMeta WHERE id = ?
+    SELECT * FROM music WHERE id = ?
   `, [id]);
     res.json(result);
   });
