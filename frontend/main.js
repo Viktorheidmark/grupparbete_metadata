@@ -3,24 +3,15 @@ document.body.addEventListener('click', event => {
   let navLink = event.target.closest('header nav a');
   if (!navLink) { return; }
   event.preventDefault();
-  let linkText = navLink.textContent;
-  showContent(linkText);
+  showContent();
 });
 
-// Function to show page content
-function showContent(label) {
-  let content;
-  if (label === 'Start') {
-    content = `
-      <h1>Start</h1>
-      <p>Välkommen till våra sökmotor för metadata, där ska kunna söka i viktiga filer från företagets filservrar.</p>
-      <p>Vi är Viktor, Isse, Tannz och Benereta som utvecklar detta sida.</p>
-      <p>Kontakta oss för fler frågor.</p>
-    `;
-  }
-  else if (label === 'Sök musik') {
-    content = `
-      <h1>Sök musik</h1>
+// Function to show all search fields at once
+function showContent() {
+  let content = `
+    <h1>Sök metadata</h1>
+    <section>
+      <h2>Sök musik</h2>
       <label>
         Sök på: <select name="music-meta-field">
           <option value="artist">Artist</option>
@@ -29,63 +20,49 @@ function showContent(label) {
           <option value="genre">Genre</option>
         </select>
       </label>
-      <label>
-        <input name="music-search" type="text" placeholder="Sök bland musikfiler">
-      </label>
+      <input name="music-search" type="text" placeholder="Sök bland musikfiler">
       <section class="music-search-result"></section>
-    `;
-  }
-  else if (label === 'Sök pdf') {
-    content = `
-      <h1>Sök pdf</h1>
+    </section>
+    <section>
+      <h2>Sök pdf</h2>
       <label>
         Sök på: <select name="pdf-meta-field">
           <option value="title">Pdftitel</option>
           <option value="author">Författare</option>
         </select>
       </label>
-      <label>
-        <input name="pdf-search" type="text" placeholder="Sök bland pdffiler">
-      </label>
+      <input name="pdf-search" type="text" placeholder="Sök bland pdffiler">
       <section class="pdf-search-result"></section>
-    `;
-  }
-  else if (label === 'Sök bilder') {
-    content = `
-      <h1>Sök bilder</h1>
+    </section>
+    <section>
+      <h2>Sök bilder</h2>
       <label>
         Sök på: <select name="picture-meta-field">
           <option value="title">Titel</option>
-          <option value="make">marke</option>
-          <option value="model">modell</option>
+          <option value="make">Märke</option>
+          <option value="model">Modell</option>
         </select>
       </label>
-      <label>
-        <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
-      </label>
+      <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
       <section class="picture-search-result"></section>
-    `;
-  }
-  else if (label === 'Sök powerpoint') {
-    content = `
-      <h1>Sök powerpoint</h1>
+    </section>
+    <section>
+      <h2>Sök powerpoint</h2>
       <label>
         Sök på: <select name="ppt-meta-field">
           <option value="title">Titel</option>
-          <option value="author">förfatare</option>
+          <option value="author">Författare</option>
         </select>
       </label>
-      <label>
-        <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
-      </label>
+      <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
       <section class="ppt-search-result"></section>
-    `;
-  }
+    </section>
+  `;
   document.querySelector('main').innerHTML = content;
 }
 
 // When the page loads
-showContent('Start');
+showContent();
 
 // Listen to key up events in all search input fields
 document.body.addEventListener('keyup', event => {
@@ -239,6 +216,5 @@ async function pptSearch() {
       </article>
     `;
   }
-    document.querySelector('.ppt-search-result').innerHTML = resultAsHtml;
-  }
-  
+  document.querySelector('.ppt-search-result').innerHTML = resultAsHtml;
+}
