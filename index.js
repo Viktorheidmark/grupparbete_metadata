@@ -4,6 +4,7 @@ import dbCredentials from './db-credentials.js';
 import setupMusicRestRoutes from './music-rest-routes.js';
 import setupPdfRestRoutes from './pdf-rest-routes.js';
 import setupPicturesRestRoutes from './pictures-rest-routes.js';
+import setupPowerpointRestRoutes from './powerpoint-rest-routes.js';
 
 
 // connect to db
@@ -16,6 +17,7 @@ const app = express();
 setupMusicRestRoutes(app, db);
 setupPdfRestRoutes(app, db);
 setupPicturesRestRoutes(app, db);
+setupPowerpointRestRoutes(app, db);
 
 // Serve files from the frontend folder
 app.use(express.static('frontend'));
