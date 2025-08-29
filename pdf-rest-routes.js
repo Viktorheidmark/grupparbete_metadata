@@ -10,10 +10,9 @@ export default function setupPdfRestRoutes(app, db) {
         }
         // run the db query as a prepared statement
         const [result] = await db.execute(`
-    SELECT id,meta->>'$.file' AS fileName,
+    SELECT id,meta->>'$.fileName' AS fileName,
       meta->>'$.common.title' AS titel,
-      meta->>'$.common.author' AS författare,
-      meta->>'$.common.subject' AS Ämne
+      meta->>'$.common.author' AS författare
     FROM music
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
