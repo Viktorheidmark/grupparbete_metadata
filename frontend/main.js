@@ -241,5 +241,6 @@ async function pptSearch() {
       </article>
     `;
   }
-  document.querySelector('.ppt-search-result').innerHTML;
+    document.querySelector('.ppt-search-result').innerHTML = resultAsHtml;
+  }
   
