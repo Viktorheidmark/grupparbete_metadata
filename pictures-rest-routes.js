@@ -11,10 +11,10 @@ export default function setupPicturesRestRoutes(app, db) {
         // run the db query as a prepared statement
         const [result] = await db.execute(`
     SELECT id,meta->>'$.file' AS fileName,
-      meta->>'$.common.Make' AS marke,
-      meta->>'$.common.Model' AS modell
+      meta->>'$.metadata.Make' AS make,
+      meta->>'$.metadata.Model' AS model
     FROM pictures
-    WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
+    WHERE LOWER(meta->>'$.metadata.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
         );
         // return the result as json
