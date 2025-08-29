@@ -42,7 +42,6 @@ function showContent(label) {
         Sök på: <select name="pdf-meta-field">
           <option value="title">Pdftitel</option>
           <option value="author">Författare</option>
-          <option value="subject">Ämne</option>
         </select>
       </label>
       <label>
@@ -57,8 +56,8 @@ function showContent(label) {
       <label>
         Sök på: <select name="picture-meta-field">
           <option value="title">Titel</option>
-          <option value="author">Fotograf</option>
-          <option value="date">Datum</option>
+          <option value="make">marke</option>
+          <option value="model">modell</option>
         </select>
       </label>
       <label>
@@ -73,8 +72,7 @@ function showContent(label) {
       <label>
         Sök på: <select name="ppt-meta-field">
           <option value="title">Titel</option>
-          <option value="author">Skapare</option>
-          <option value="date">Datum</option>
+          <option value="author">förfatare</option>
         </select>
       </label>
       <label>
