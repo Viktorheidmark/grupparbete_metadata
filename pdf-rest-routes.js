@@ -13,7 +13,7 @@ export default function setupPdfRestRoutes(app, db) {
     SELECT id,meta->>'$.file' AS fileName,
       meta->>'$.common.title' AS titel,
       meta->>'$.common.author' AS författare,
-      meta->>'$.common.subject' AS Ämne
+      meta->>'$.common
     FROM music
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
