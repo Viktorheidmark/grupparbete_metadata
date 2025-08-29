@@ -2,11 +2,8 @@
 document.body.addEventListener('click', event => {
   let navLink = event.target.closest('header nav a');
   if (!navLink) { return; }
-  // don't try to follow the link in the a tag
   event.preventDefault();
-  // read the text in the link
   let linkText = navLink.textContent;
-  // show correct content depending on menu choice
   showContent(linkText);
 });
 
@@ -16,9 +13,9 @@ function showContent(label) {
   if (label === 'Start') {
     content = `
       <h1>Start</h1>
-      <p>Välkommen till våra sökmotor för metadata, där det är tänkt vi så småningom ska kunna söka i viktiga filer från företagets filservrar.</p>
-      <p>Vi har börjat med musikfiler och nuvarande import gjorde 2025-08-27.</p>
-      <p>Kontakta din vänliga <b>data manager</b> Thomas om du känner till fler musikfiler som ska indexeras. <a href="mailto:thomas@nodehill.com">thomas@nodehill.com</a>.</p>
+      <p>Välkommen till våra sökmotor för metadata, där ska kunna söka i viktiga filer från företagets filservrar.</p>
+      <p>Vi är Viktor, Isse, Tannz och Benereta som utvecklar detta sida.</p>
+      <p>Kontakta oss för fler frågor.</p>
     `;
   }
   else if (label === 'Sök musik') {
@@ -38,62 +35,121 @@ function showContent(label) {
       <section class="music-search-result"></section>
     `;
   }
+  else if (label === 'Sök pdf') {
+    content = `
+      <h1>Sök pdf</h1>
+      <label>
+        Sök på: <select name="pdf-meta-field">
+          <option value="title">Pdftitel</option>
+          <option value="author">Författare</option>
+          <option value="subject">Ämne</option>
+        </select>
+      </label>
+      <label>
+        <input name="pdf-search" type="text" placeholder="Sök bland pdffiler">
+      </label>
+      <section class="pdf-search-result"></section>
+    `;
+  }
+  else if (label === 'Sök bilder') {
+    content = `
+      <h1>Sök bilder</h1>
+      <label>
+        Sök på: <select name="picture-meta-field">
+          <option value="title">Titel</option>
+          <option value="author">Fotograf</option>
+          <option value="date">Datum</option>
+        </select>
+      </label>
+      <label>
+        <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
+      </label>
+      <section class="picture-search-result"></section>
+    `;
+  }
+  else if (label === 'Sök powerpoint') {
+    content = `
+      <h1>Sök powerpoint</h1>
+      <label>
+        Sök på: <select name="ppt-meta-field">
+          <option value="title">Titel</option>
+          <option value="author">Skapare</option>
+          <option value="date">Datum</option>
+        </select>
+      </label>
+      <label>
+        <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
+      </label>
+      <section class="ppt-search-result"></section>
+    `;
+  }
   document.querySelector('main').innerHTML = content;
 }
 
 // When the page loads
 showContent('Start');
 
-// Listen to key up events in the music-search input field
+// Listen to key up events in all search input fields
 document.body.addEventListener('keyup', event => {
-  let inputField = event.target.closest('input[name="music-search"]');
-  if (!inputField) { return; }
-  musicSearch();
+  if (event.target.matches('input[name="music-search"]')) musicSearch();
+  if (event.target.matches('input[name="pdf-search"]')) pdfSearch();
+  if (event.target.matches('input[name="picture-search"]')) pictureSearch();
+  if (event.target.matches('input[name="ppt-search"]')) pptSearch();
 });
 
-// Listen to changes to the select/dropdown music meta field
+// Listen to changes to all select/dropdown meta fields
 document.body.addEventListener('change', event => {
-  let select = event.target.closest('select[name="music-meta-field"]');
-  if (!select) { return; }
-  musicSearch();
+  if (event.target.matches('select[name="music-meta-field"]')) musicSearch();
+  if (event.target.matches('select[name="pdf-meta-field"]')) pdfSearch();
+  if (event.target.matches('select[name="picture-meta-field"]')) pictureSearch();
+  if (event.target.matches('select[name="ppt-meta-field"]')) pptSearch();
 });
 
-// event handler to show all metadata for a music file on click
-// on the button btn-show-all-music-metadata
+// event handler to show all metadata for a file on click
 document.body.addEventListener('click', async event => {
-  let button = event.target.closest('.btn-show-all-music-metadata');
-  if (!button) { return; }
-  // if we have clicked a  btn-show-all-music-metadata
-  let id = button.getAttribute('data-id');
-  // fetch detailed metadata
-  let rawResponse = await fetch('/api/music-all-meta/' + id);
-  let result = await rawResponse.json();
-  // create a pre element
-  let pre = document.createElement('pre');
-  pre.innerHTML = JSON.stringify(result, null, '  ');
-  // add the newly created pre element after the button
-  button.after(pre);
+  if (event.target.matches('.btn-show-all-music-metadata')) {
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/music-all-meta/' + id);
+    let result = await rawResponse.json();
+    let pre = document.createElement('pre');
+    pre.innerHTML = JSON.stringify(result, null, '  ');
+    event.target.after(pre);
+  }
+  if (event.target.matches('.btn-show-all-pdf-metadata')) {
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/pdf-all-meta/' + id);
+    let result = await rawResponse.json();
+    let pre = document.createElement('pre');
+    pre.innerHTML = JSON.stringify(result, null, '  ');
+    event.target.after(pre);
+  }
+  if (event.target.matches('.btn-show-all-picture-metadata')) {
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/picture-all-meta/' + id);
+    let result = await rawResponse.json();
+    let pre = document.createElement('pre');
+    pre.innerHTML = JSON.stringify(result, null, '  ');
+    event.target.after(pre);
+  }
+  if (event.target.matches('.btn-show-all-ppt-metadata')) {
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/ppt-all-meta/' + id);
+    let result = await rawResponse.json();
+    let pre = document.createElement('pre');
+    pre.innerHTML = JSON.stringify(result, null, '  ');
+    event.target.after(pre);
+  }
 });
 
-
-// music search (called on key up in search field and on changes to the select/dropdown)
+// music search
 async function musicSearch() {
   let inputField = document.querySelector('input[name="music-search"]');
-  // if empty input field do not search just empty search results
-  // if(!inputField.value){
-  if (inputField.value === '') {
+  if (!inputField || inputField.value === '') {
     document.querySelector('.music-search-result').innerHTML = '';
     return;
   }
-  // get the chosen field to search for in the meta data
-  let field = document.querySelector(
-    'select[name="music-meta-field"]'
-  ).value;
-  // ask the rest-api (correct rest route) for search results
-  let rawResponse = await fetch(
-    `/api/music-search/${field}/${inputField.value}`
-  );
-  // unpack search results from json
+  let field = document.querySelector('select[name="music-meta-field"]').value;
+  let rawResponse = await fetch(`/api/music-search/${field}/${inputField.value}`);
   let result = await rawResponse.json();
   let resultAsHtml = '';
   for (let { id, fileName, title, artist, album, genre } of result) {
@@ -109,6 +165,80 @@ async function musicSearch() {
       </article>
     `;
   }
-  // replace content in the .music-search-result element (a section tag)
   document.querySelector('.music-search-result').innerHTML = resultAsHtml;
 }
+
+// pdf search
+async function pdfSearch() {
+  let inputField = document.querySelector('input[name="pdf-search"]');
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.pdf-search-result').innerHTML = '';
+    return;
+  }
+  let field = document.querySelector('select[name="pdf-meta-field"]').value;
+  let rawResponse = await fetch(`/api/pdf-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
+  for (let { id, fileName, title, author, subject } of result) {
+    resultAsHtml += `
+      <article>
+        <h3>${title || 'Okänd titel'}</h3>
+        <p><b>Författare:</b> ${author || 'Okänd författare'}</p>
+        <p><b>Ämne:</b> ${subject || 'Okänt ämne'}</p>
+        <a href="/data/pdf/${fileName}" download>Ladda ned PDF</a>
+        <p><button class="btn-show-all-pdf-metadata" data-id="${id}">Visa all metadata</button></p>
+      </article>
+    `;
+  }
+  document.querySelector('.pdf-search-result').innerHTML = resultAsHtml;
+}
+
+// picture search
+async function pictureSearch() {
+  let inputField = document.querySelector('input[name="picture-search"]');
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.picture-search-result').innerHTML = '';
+    return;
+  }
+  let field = document.querySelector('select[name="picture-meta-field"]').value;
+  let rawResponse = await fetch(`/api/picture-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
+  for (let { id, fileName, title, author, date } of result) {
+    resultAsHtml += `
+      <article>
+        <h3>${title || 'Okänd titel'}</h3>
+        <p><b>Fotograf:</b> ${author || 'Okänd fotograf'}</p>
+        <p><b>Datum:</b> ${date || 'Okänt datum'}</p>
+        <img src="/data/pictures/${fileName}" alt="${title || fileName}" style="max-width:200px;">
+        <p><a href="/data/pictures/${fileName}" download>Ladda ned bild</a></p>
+        <p><button class="btn-show-all-picture-metadata" data-id="${id}">Visa all metadata</button></p>
+      </article>
+    `;
+  }
+  document.querySelector('.picture-search-result').innerHTML = resultAsHtml;
+}
+
+// ppt search
+async function pptSearch() {
+  let inputField = document.querySelector('input[name="ppt-search"]');
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.ppt-search-result').innerHTML = '';
+    return;
+  }
+  let field = document.querySelector('select[name="ppt-meta-field"]').value;
+  let rawResponse = await fetch(`/api/ppt-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
+  for (let { id, fileName, title, author, date } of result) {
+    resultAsHtml += `
+      <article>
+        <h3>${title || 'Okänd titel'}</h3>
+        <p><b>Skapare:</b> ${author || 'Okänd skapare'}</p>
+        <p><b>Datum:</b> ${date || 'Okänt datum'}</p>
+        <a href="/data/ppt/${fileName}" download>Ladda ned PowerPoint</a>
+        <p><button class="btn-show-all-ppt-metadata" data-id="${id}">Visa all metadata</button></p>
+      </article>
+    `;
+  }
+  document.querySelector('.ppt-search-result').innerHTML = resultAsHtml;
