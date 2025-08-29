@@ -13,7 +13,7 @@ export default function setupPicturesRestRoutes(app, db) {
     SELECT id,meta->>'$.file' AS fileName,
       meta->>'$.common.Make' AS marke,
       meta->>'$.common.Model' AS modell
-    FROM music
+    FROM pictures
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
         );

@@ -13,7 +13,7 @@ export default function setupPowerpointRestRoutes(app, db) {
     SELECT id,meta->>'$.file' AS fileName,
       meta->>'$.common.title' AS title,
       meta->>'$.common.author' AS författare
-    FROM music
+    FROM powerpoint
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
     );
