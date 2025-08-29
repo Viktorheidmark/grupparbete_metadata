@@ -1,4 +1,4 @@
-export default function setupPdfRestRoutes(app, db) {
+export default function setupPicturesRestRoutes(app, db) {
 
     app.get('/api/pictures-search/:field/:searchValue', async (req, res) => {
         // get field and searhValue from the request parameters
