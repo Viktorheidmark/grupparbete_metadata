@@ -4,7 +4,7 @@ export default function setupPdfRestRoutes(app, db) {
         // get field and searhValue from the request parameters
         const { field, searchValue } = req.params;
         // check that field is a valid field, if not do nothing
-        if (!['title', 'author', 'subject'].includes(field)) {
+        if (!['title', 'author'].includes(field)) {
             res.json({ error: 'Invalid field name!' });
             return;
         }
@@ -13,7 +13,7 @@ export default function setupPdfRestRoutes(app, db) {
     SELECT id,meta->>'$.fileName' AS fileName,
       meta->>'$.common.title' AS titel,
       meta->>'$.common.author' AS författare,
-    FROM music
+    FROM pdf
     WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
         );
