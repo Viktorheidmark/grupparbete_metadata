@@ -10,7 +10,7 @@ export default function setupPowerpointRestRoutes(app, db) {
     }
     // run the db query as a prepared statement
     const [result] = await db.execute(`
-    SELECT id,meta->>'$.fileName' AS FileName,
+    SELECT id,meta->>'$.FileName' AS FileName,
       meta->>'$.Title' AS Title,
       meta->>'$.Author' AS Author
     FROM powerpoint
