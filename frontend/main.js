@@ -49,8 +49,8 @@ function showContent() {
       <h2>Sök powerpoint</h2>
       <label>
         Sök på: <select name="ppt-meta-field">
-          <option value="title">Titel</option>
-          <option value="author">Författare</option>
+          <option value="Title">Titel</option>
+          <option value="Author">Författare</option>
         </select>
       </label>
       <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
