@@ -68,7 +68,7 @@ document.body.addEventListener('keyup', event => {
   if (event.target.matches('input[name="music-search"]')) musicSearch();
   if (event.target.matches('input[name="pdf-search"]')) pdfSearch();
   if (event.target.matches('input[name="picture-search"]')) pictureSearch();
-  if (event.target.matches('input[name="ppt-search"]')) pptSearch();
+  if (event.target.matches('input[name="powerpoint-search"]')) pptSearch();
 });
 
 // Listen to changes to all select/dropdown meta fields
@@ -201,16 +201,15 @@ async function pptSearch() {
     return;
   }
   let field = document.querySelector('select[name="ppt-meta-field"]').value;
-  let rawResponse = await fetch(`/api/ppt-search/${field}/${inputField.value}`);
+  let rawResponse = await fetch(`/api/powerpoint-search/${field}/${inputField.value}`);
   let result = await rawResponse.json();
   let resultAsHtml = '';
-  for (let { id, fileName, title, author, date } of result) {
+  for (let { id, FileName, Title, Author } of result) {
     resultAsHtml += `
       <article>
-        <h3>${title || 'Okänd titel'}</h3>
-        <p><b>Skapare:</b> ${author || 'Okänd skapare'}</p>
-        <p><b>Datum:</b> ${date || 'Okänt datum'}</p>
-        <a href="/data/ppt/${fileName}" download>Ladda ned PowerPoint</a>
+        <h3>${Title || 'Okänd titel'}</h3>
+        <p><b>Skapare:</b> ${Author || 'Okänd skapare'}</p>
+        <a href="/data/ppt/${FileName}" download>Ladda ned PowerPoint</a>
         <p><button class="btn-show-all-ppt-metadata" data-id="${id}">Visa all metadata</button></p>
       </article>
     `;

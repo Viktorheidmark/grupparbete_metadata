@@ -11,10 +11,10 @@ export default function setupPowerpointRestRoutes(app, db) {
     // run the db query as a prepared statement
     const [result] = await db.execute(`
     SELECT id,meta->>'$.file' AS fileName,
-      meta->>'$.info.Title' AS title,
-      meta->>'$.info.Author' AS författare
+      meta->>'$.common.title' AS title,
+      meta->>'$.common.author' AS författare
     FROM powerpoint
-    WHERE LOWER(meta->>'$.info.${field}') LIKE LOWER(?)
+    WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
     );
     // return the result as json
