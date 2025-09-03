@@ -38,9 +38,8 @@ function showContent() {
       <h2>Sök bilder</h2>
       <label>
         Sök på: <select name="picture-meta-field">
-          <option value="title">Titel</option>
-          <option value="make">Märke</option>
-          <option value="model">Modell</option>
+          <option value="Make">Märke</option>
+          <option value="Model">Modell</option>
         </select>
       </label>
       <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
@@ -176,7 +175,7 @@ async function pictureSearch() {
     return;
   }
   let field = document.querySelector('select[name="picture-meta-field"]').value;
-  let rawResponse = await fetch(`/api/picture-search/${field}/${inputField.value}`);
+  let rawResponse = await fetch(`/api/pictures-search/${field}/${inputField.value}`);
   let result = await rawResponse.json();
   let resultAsHtml = '';
   for (let { id, fileName, title, author, date } of result) {
