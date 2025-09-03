@@ -68,7 +68,7 @@ document.body.addEventListener('keyup', event => {
   if (event.target.matches('input[name="music-search"]')) musicSearch();
   if (event.target.matches('input[name="pdf-search"]')) pdfSearch();
   if (event.target.matches('input[name="picture-search"]')) pictureSearch();
-  if (event.target.matches('input[name="powerpoint-search"]')) pptSearch();
+  if (event.target.matches('input[name="ppt-search"]')) pptSearch();
 });
 
 // Listen to changes to all select/dropdown meta fields
