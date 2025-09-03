@@ -4,17 +4,17 @@ export default function setupPowerpointRestRoutes(app, db) {
     // get field and searhValue from the request parameters
     const { field, searchValue } = req.params;
     // check that field is a valid field, if not do nothing
-    if (!['title', 'author'].includes(field)) {
+    if (!['Title', 'Author'].includes(field)) {
       res.json({ error: 'Invalid field name!' });
       return;
     }
     // run the db query as a prepared statement
     const [result] = await db.execute(`
-    SELECT id,meta->>'$.file' AS fileName,
-      meta->>'$.common.title' AS title,
-      meta->>'$.common.author' AS författare
+    SELECT id,meta->>'$.fileName' AS FileName,
+      meta->>'$.Title' AS Title,
+      meta->>'$.Author' AS Author
     FROM powerpoint
-    WHERE LOWER(meta->>'$.common.${field}') LIKE LOWER(?)
+    WHERE LOWER(meta->>'$.${field}') LIKE LOWER(?)
   `, ['%' + searchValue + '%']
     );
     // return the result as json
