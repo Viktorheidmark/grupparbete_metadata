@@ -23,6 +23,7 @@ function showContent() {
       <input name="music-search" type="text" placeholder="Sök bland musikfiler">
       <section class="music-search-result"></section>
     </section>
+
     <section>
       <h2>Sök pdf</h2>
       <label>
@@ -34,6 +35,7 @@ function showContent() {
       <input name="pdf-search" type="text" placeholder="Sök bland pdffiler">
       <section class="pdf-search-result"></section>
     </section>
+
     <section>
       <h2>Sök bilder</h2>
       <label>
@@ -45,6 +47,7 @@ function showContent() {
       <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
       <section class="picture-search-result"></section>
     </section>
+    
     <section>
       <h2>Sök powerpoint</h2>
       <label>

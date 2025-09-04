@@ -116,3 +116,40 @@ label {
     display: block;
     margin: 20px 0;
 }
+
+#map {
+  height: 60vh;
+  width: 50vw;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 20px;
+  font-size: 18px;
+  font-family: Verdana;
+}
+
+select,
+button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+article {
+  margin-top: 20px;
+}
+
+img {
+  width: 50vw;
+  cursor: pointer;
+}
+
+#map-fixed {
+  position: fixed !important;
+  right: 20px;
+  top: 20px;
+  width: 40vw;
+  height: 80vh;
+}
