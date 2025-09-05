@@ -23,25 +23,25 @@ function showContent(page = 'start') {
   }
   else if (page === 'music') {
     html = `
-      <h1>Sök musik</h1>
+      <h1></h1>
       ${musicSearchPageContent()}
     `;
   }
   else if (page === 'pdf') {
     html = `
-      <h1>Sök pdf</h1>
+      <h1></h1>
       ${pdfSearchPageContent()}
     `;
   }
   else if (page === 'pictures') {
     html = `
-      <h1>Sök bilder</h1>
+      <h1></h1>
       ${picturesSearchPageContent()}
     `;
   }
   else if (page === 'ppt') {
     html = `
-      <h1>Sök powerpoint</h1>
+      <h1></h1>
       ${pptSearchPageContent()}
     `;
   }
