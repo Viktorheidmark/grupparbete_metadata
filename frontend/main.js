@@ -1,12 +1,11 @@
-// Ladda som ES-modul i index.html: <script type="module" src="main.js"></script>
-
+// Ladda som ES-modul i index.html
 import { musicSearchPageContent }    from './music-search.js';
 import { pdfSearchPageContent }      from './pdf-search.js';
 import { picturesSearchPageContent } from './pictures-search.js';
 import { pptSearchPageContent }      from './powerpoint-search.js';
 import { startPageContent }          from './start-page.js';
 
-// Meny: växla vy baserat på data-page
+// Meny – byt sida
 document.body.addEventListener('click', (e) => {
   const navLink = e.target.closest('header nav a');
   if (!navLink) return;
@@ -21,29 +20,37 @@ function showContent(page = 'start') {
 
   if (page === 'start') {
     html = startPageContent();
-  } else if (page === 'search') {
+  }
+  else if (page === 'music') {
     html = `
-      <h1>Sök metadata</h1>
-      <section id="music-section">
-        ${musicSearchPageContent()}
-      </section>
-      <section id="pdf-section">
-        ${pdfSearchPageContent()}
-      </section>
-      <section id="pictures-section">
-        ${picturesSearchPageContent()}
-      </section>
-      <section id="ppt-section">
-        ${pptSearchPageContent()}
-      </section>
+      <h1>Sök musik</h1>
+      ${musicSearchPageContent()}
     `;
-  } else {
-    // Fallback om något okänt råkar skickas in
-    html = startPageContent();
+  }
+  else if (page === 'pdf') {
+    html = `
+      <h1>Sök pdf</h1>
+      ${pdfSearchPageContent()}
+    `;
+  }
+  else if (page === 'pictures') {
+    html = `
+      <h1>Sök bilder</h1>
+      ${picturesSearchPageContent()}
+    `;
+  }
+  else if (page === 'ppt') {
+    html = `
+      <h1>Sök powerpoint</h1>
+      ${pptSearchPageContent()}
+    `;
+  }
+  else {
+    html = startPageContent(); // fallback
   }
 
   document.querySelector('main').innerHTML = html;
 }
 
-// Visa startsidan när appen laddar
+// Visa startsidan vid laddning
 showContent('start');
