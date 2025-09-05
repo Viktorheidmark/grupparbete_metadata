@@ -1,0 +1,64 @@
+export function picturesSearchPageContent() {
+  return `
+      <h2>Sök bilder</h2>
+      <label>
+        Sök på: <select name="picture-meta-field">
+          <option value="Make">Märke</option>
+          <option value="Model">Modell</option>
+        </select>
+      </label>
+      <label>
+        <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
+      </label>
+      <section class="picture-search-result"></section>
+    `;
+}
+
+document.body.addEventListener('keyup', event => {
+  let inputField = event.target.closest('input[name="picture-search"]');
+  if (!inputField) { return; }
+  pictureSearch();
+});
+
+document.body.addEventListener('change', event => {
+  let select = event.target.closest('select[name="picture-meta-field"]');
+  if (!select) { return; }
+  pictureSearch();
+});
+
+document.body.addEventListener('click', async event => {
+  let button = event.target.closest('.btn-show-all-picture-metadata');
+  if (!button) { return; }
+  let id = button.getAttribute('data-id');
+  let rawResponse = await fetch('/api/pictures-all-meta/' + encodeURIComponent(id));
+  let result = await rawResponse.json();
+  let pre = document.createElement('pre');
+  pre.textContent = JSON.stringify(result, null, 2);
+  button.after(pre);
+});
+
+async function pictureSearch() {
+  let inputField = document.querySelector('input[name="picture-search"]');
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.picture-search-result').innerHTML = '';
+    return;
+  }
+  let field = document.querySelector('select[name="picture-meta-field"]').value;
+  let q = encodeURIComponent(inputField.value.trim());
+  let rawResponse = await fetch(`/api/pictures-search/${field}/${q}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
+  for (let { id, fileName, title, author, date } of result) {
+    resultAsHtml += `
+      <article>
+        <h3>${title || 'Okänd titel'}</h3>
+        <p><b>Fotograf:</b> ${author || 'Okänd fotograf'}</p>
+        <p><b>Datum:</b> ${date || 'Okänt datum'}</p>
+        <img src="/data/pictures/${fileName}" alt="${title || fileName}" style="max-width:200px;">
+        <p><a href="/data/pictures/${fileName}" download>Ladda ned bild</a></p>
+        <p><button class="btn-show-all-picture-metadata" data-id="${id}">Visa all metadata</button></p>
+      </article>
+    `;
+  }
+  document.querySelector('.picture-search-result').innerHTML = resultAsHtml;
+}
