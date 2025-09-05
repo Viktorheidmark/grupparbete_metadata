@@ -5,7 +5,7 @@ export function musicSearchPageContent() {
       <label>
         Categories: <select name="music-meta-field">
           <option value="artist">Artist</option>
-          <option value="title">Låttitel</option>
+          <option value="title">Title</option>
           <option value="album">Album</option>
           <option value="genre">Genre</option>
         </select>
