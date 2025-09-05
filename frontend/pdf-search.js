@@ -48,12 +48,11 @@ async function pdfSearch() {
   let rawResponse = await fetch(`/api/pdf-search/${field}/${q}`);
   let result = await rawResponse.json();
   let resultAsHtml = '';
-  for (let { id, fileName, title, author, subject } of result) {
+  for (let { id, fileName, title, author } of result) {
     resultAsHtml += `
       <article>
-        <h3><b>Title: </b>${title || 'Okänd titel'}</h3>
-        <p><b>Författare:</b> ${author || 'Okänd författare'}</p>
-        <p><b>Ämne:</b> ${subject || 'Okänt ämne'}</p>
+        <h2><b>Title: </b>${title || 'Okänd titel'}</h2>
+        <p><b>Författare:</b> ${author || 'unknown author'}</p>
         <a href="/data/pdf/${fileName}" download>Ladda ned PDF</a>
         <p><button class="btn-show-all-pdf-metadata" data-id="${id}">Visa all metadata</button></p>
       </article>
