@@ -3,7 +3,7 @@ export function pptSearchPageContent() {
       <h2>Sök powerpoint</h2>
       <label>
         Sök på: <select name="ppt-meta-field">
-          <option value="Title">Titel</option>
+          <option value="Company">Company</option>
           <option value="Author">Författare</option>
         </select>
       </label>
@@ -48,12 +48,12 @@ async function pptSearch() {
   let rawResponse = await fetch(`/api/powerpoint-search/${field}/${q}`);
   let result = await rawResponse.json();
   let resultAsHtml = '';
-  for (let { id, fileName, title, author } of result) {
+  for (let { id, FileName, Company, Author } of result) {
     resultAsHtml += `
       <article>
-        <h3>${title || 'Okänd titel'}</h3>
-        <p><b>Skapare:</b> ${author || 'Okänd skapare'}</p>
-        <a href="/data/ppt/${fileName}" download>Ladda ned PowerPoint</a>
+        <h3>${Company || 'unknown Company'}</h3>
+        <p><b>Author:</b> ${Author || 'unknown author'}</p>
+        <a href="/data/ppt/${FileName}" download>Ladda ned PowerPoint</a>
         <p><button class="btn-show-all-ppt-metadata" data-id="${id}">Visa all metadata</button></p>
       </article>
     `;

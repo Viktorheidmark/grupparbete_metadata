@@ -1,33 +1,63 @@
 export default function setupPowerpointRestRoutes(app, db) {
 
   app.get('/api/powerpoint-search/:field/:searchValue', async (req, res) => {
-    // get field and searhValue from the request parameters
-    const { field, searchValue } = req.params;
-    // check that field is a valid field, if not do nothing
-    if (!['Title', 'Author'].includes(field)) {
-      res.json({ error: 'Invalid field name!' });
+    let { field, searchValue } = req.params;
+
+    // Tillåt bara dessa fält i UI:t
+    if (!['Company', 'Author'].includes(field)) {
+      res.status(400).json({ error: 'Invalid field name!' });
       return;
     }
-    // run the db query as a prepared statement
-    const [result] = await db.execute(`
-    SELECT id,meta->>'$.FileName' AS FileName,
-      meta->>'$.Title' AS Title,
-      meta->>'$.Author' AS Author
-    FROM powerpoint
-    WHERE LOWER(meta->>'$.${field}') LIKE LOWER(?)
-  `, ['%' + searchValue + '%']
+
+    // Bygg WHERE som täcker olika JSON-nycklar beroende på fält
+    let whereClause = '';
+    if (field === 'Company') {
+      whereClause = `
+        (
+          LOWER(meta->>'$.Company') LIKE LOWER(?)
+          OR LOWER(meta->>'$.company') LIKE LOWER(?)
+          OR LOWER(meta->>'$.Properties.Company') LIKE LOWER(?)
+        )
+      `;
+    } else if (field === 'Author') {
+      whereClause = `
+        (
+          LOWER(meta->>'$.Author') LIKE LOWER(?)
+          OR LOWER(meta->>'$.author') LIKE LOWER(?)
+        )
+      `;
+    }
+
+    const [result] = await db.execute(
+      `
+      SELECT
+        id,
+        meta->>'$.FileName' AS FileName,
+        COALESCE(
+          meta->>'$.Company',
+          meta->>'$.company',
+          meta->>'$.Properties.Company'
+        ) AS Company,
+        COALESCE(
+          meta->>'$.Author',
+          meta->>'$.author'
+        ) AS Author
+      FROM powerpoint
+      WHERE ${whereClause}
+      `,
+      // tre placeholders om Company, två om Author
+      field === 'Company'
+        ? Array(3).fill('%' + searchValue + '%')
+        : Array(2).fill('%' + searchValue + '%')
     );
-    // return the result as json
+
     res.json(result);
   });
 
-  // get all metadata for a single track (by id)
   app.get('/api/powerpoint-all-meta/:id', async (req, res) => {
     const { id } = req.params;
-    let [result] = await db.execute(`
-    SELECT * FROM powerpoint WHERE id = ?
-  `, [id]);
-    res.json(result);
+    const [rows] = await db.execute(`SELECT * FROM powerpoint WHERE id = ?`, [id]);
+    res.json(rows);
   });
 
 }
