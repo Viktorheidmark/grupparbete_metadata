@@ -1,9 +1,9 @@
 // A function to create the music search page content
 export function musicSearchPageContent() {
   return `
-      <h2>Sök musik</h2>
+      <h2>Search music</h2>
       <label>
-        Sök på: <select name="music-meta-field">
+        Categories: <select name="music-meta-field">
           <option value="artist">Artist</option>
           <option value="title">Låttitel</option>
           <option value="album">Album</option>
@@ -11,7 +11,7 @@ export function musicSearchPageContent() {
         </select>
       </label>
       <label>
-        <input name="music-search" type="text" placeholder="Sök bland musikfiler">
+        <input name="music-search" type="text" placeholder="Search among music files">
       </label>
       <section class="music-search-result"></section>
     `;
@@ -58,13 +58,13 @@ async function musicSearch() {
   for (let { id, fileName, title, artist, album, genre } of result) {
     resultAsHtml += `
       <article>
-        <h3><b>Artist: </b>${artist || 'Okänd artist'}</h3>
-        <h2>${title || 'Okänd titel'}</h2>
-        <p><b>Från albumet:</b> ${album || 'Okänt album'}</p>
-        <p><b>Genre:</b> ${genre || 'Okänd genre'}</p>
+        <h3><b>Artist: </b>${artist || 'unknown artist'}</h3>
+        <h2>${title || 'unknown title'}</h2>
+        <p><b>From album:</b> ${album || 'unknown album'}</p>
+        <p><b>Genre:</b> ${genre || 'unknown genre'}</p>
         <audio controls src="/data/music/${fileName}"></audio>
-        <p><a href="/data/music/${fileName}" download>Ladda ned filen</a></p>
-        <p><button class="btn-show-all-music-metadata" data-id="${id}">Visa all metadata</button></p>
+        <p><a href="/data/music/${fileName}" download>Download file</a></p>
+        <p><button class="btn-show-all-music-metadata" data-id="${id}">Show all metadata</button></p>
       </article>
     `;
   }
