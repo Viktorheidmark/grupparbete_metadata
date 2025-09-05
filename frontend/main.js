@@ -1,17 +1,15 @@
-
 // Click on menu link
 document.body.addEventListener('click', event => {
   let navLink = event.target.closest('header nav a');
-  if (!navLink) return;
+  if (!navLink) { return; }
   event.preventDefault();
   showContent();
 });
 
-// Function to show all search fields at once (inkl. kartsektion)
+// Function to show all search fields at once
 function showContent() {
   let content = `
     <h1>Sök metadata</h1>
-
     <section>
       <h2>Sök musik</h2>
       <label>
@@ -49,7 +47,7 @@ function showContent() {
       <input name="picture-search" type="text" placeholder="Sök bland bildfiler">
       <section class="picture-search-result"></section>
     </section>
-
+    
     <section>
       <h2>Sök powerpoint</h2>
       <label>
@@ -61,27 +59,14 @@ function showContent() {
       <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
       <section class="ppt-search-result"></section>
     </section>
-
-    <!-- Kartsektion -->
-    <section class="map-wrapper">
-      <h2>Karta (Geo-data)</h2>
-      <div id="map-fixed">Laddar karta...</div>
-    </section>
   `;
   document.querySelector('main').innerHTML = content;
-
-  // Initiera karta
-  initMapEmbedded().catch(err => {
-    console.warn('Kunde inte initiera kartan:', err);
-    const mapEl = document.getElementById('map-fixed');
-    if (mapEl) mapEl.innerText = 'Kartan kunde inte laddas. Se konsolen.';
-  });
 }
 
-// Visa innehåll vid sidladdning
+// When the page loads
 showContent();
 
-/* ---------- Event-lyssnare för sökfunktionalitet ---------- */
+// Listen to key up events in all search input fields
 document.body.addEventListener('keyup', event => {
   if (event.target.matches('input[name="music-search"]')) musicSearch();
   if (event.target.matches('input[name="pdf-search"]')) pdfSearch();
@@ -89,6 +74,7 @@ document.body.addEventListener('keyup', event => {
   if (event.target.matches('input[name="ppt-search"]')) pptSearch();
 });
 
+// Listen to changes to all select/dropdown meta fields
 document.body.addEventListener('change', event => {
   if (event.target.matches('select[name="music-meta-field"]')) musicSearch();
   if (event.target.matches('select[name="pdf-meta-field"]')) pdfSearch();
@@ -96,46 +82,55 @@ document.body.addEventListener('change', event => {
   if (event.target.matches('select[name="ppt-meta-field"]')) pptSearch();
 });
 
+// event handler to show all metadata for a file on click
 document.body.addEventListener('click', async event => {
   if (event.target.matches('.btn-show-all-music-metadata')) {
-    let id = event.target.dataset.id;
-    let result = await (await fetch('/api/music-all-meta/' + id)).json();
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/music-all-meta/' + id);
+    let result = await rawResponse.json();
     let pre = document.createElement('pre');
     pre.innerHTML = JSON.stringify(result, null, '  ');
     event.target.after(pre);
   }
   if (event.target.matches('.btn-show-all-pdf-metadata')) {
-    let id = event.target.dataset.id;
-    let result = await (await fetch('/api/pdf-all-meta/' + id)).json();
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/pdf-all-meta/' + id);
+    let result = await rawResponse.json();
     let pre = document.createElement('pre');
     pre.innerHTML = JSON.stringify(result, null, '  ');
     event.target.after(pre);
   }
   if (event.target.matches('.btn-show-all-picture-metadata')) {
-    let id = event.target.dataset.id;
-    let result = await (await fetch('/api/pictures-all-meta/' + id)).json();
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/picture-all-meta/' + id);
+    let result = await rawResponse.json();
     let pre = document.createElement('pre');
     pre.innerHTML = JSON.stringify(result, null, '  ');
     event.target.after(pre);
   }
   if (event.target.matches('.btn-show-all-ppt-metadata')) {
-    let id = event.target.dataset.id;
-    let result = await (await fetch('/api/ppt-all-meta/' + id)).json();
+    let id = event.target.getAttribute('data-id');
+    let rawResponse = await fetch('/api/ppt-all-meta/' + id);
+    let result = await rawResponse.json();
     let pre = document.createElement('pre');
     pre.innerHTML = JSON.stringify(result, null, '  ');
     event.target.after(pre);
   }
 });
 
-/* ---------- Sökfunktioner ---------- */
+// music search
 async function musicSearch() {
   let inputField = document.querySelector('input[name="music-search"]');
-  if (!inputField || !inputField.value) return document.querySelector('.music-search-result').innerHTML = '';
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.music-search-result').innerHTML = '';
+    return;
+  }
   let field = document.querySelector('select[name="music-meta-field"]').value;
-  let result = await (await fetch(`/api/music-search/${field}/${inputField.value}`)).json();
-  let html = '';
+  let rawResponse = await fetch(`/api/music-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
   for (let { id, fileName, title, artist, album, genre } of result) {
-    html += `
+    resultAsHtml += `
       <article>
         <h3>${artist || 'Okänd artist'}</h3>
         <h2>${title || 'Okänd titel'}</h2>
@@ -147,17 +142,22 @@ async function musicSearch() {
       </article>
     `;
   }
-  document.querySelector('.music-search-result').innerHTML = html;
+  document.querySelector('.music-search-result').innerHTML = resultAsHtml;
 }
 
+// pdf search
 async function pdfSearch() {
   let inputField = document.querySelector('input[name="pdf-search"]');
-  if (!inputField || !inputField.value) return document.querySelector('.pdf-search-result').innerHTML = '';
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.pdf-search-result').innerHTML = '';
+    return;
+  }
   let field = document.querySelector('select[name="pdf-meta-field"]').value;
-  let result = await (await fetch(`/api/pdf-search/${field}/${inputField.value}`)).json();
-  let html = '';
+  let rawResponse = await fetch(`/api/pdf-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
   for (let { id, fileName, title, author, subject } of result) {
-    html += `
+    resultAsHtml += `
       <article>
         <h3>${title || 'Okänd titel'}</h3>
         <p><b>Författare:</b> ${author || 'Okänd författare'}</p>
@@ -167,17 +167,22 @@ async function pdfSearch() {
       </article>
     `;
   }
-  document.querySelector('.pdf-search-result').innerHTML = html;
+  document.querySelector('.pdf-search-result').innerHTML = resultAsHtml;
 }
 
+// picture search
 async function pictureSearch() {
   let inputField = document.querySelector('input[name="picture-search"]');
-  if (!inputField || !inputField.value) return document.querySelector('.picture-search-result').innerHTML = '';
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.picture-search-result').innerHTML = '';
+    return;
+  }
   let field = document.querySelector('select[name="picture-meta-field"]').value;
-  let result = await (await fetch(`/api/pictures-search/${field}/${inputField.value}`)).json();
-  let html = '';
+  let rawResponse = await fetch(`/api/pictures-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
   for (let { id, fileName, title, author, date } of result) {
-    html += `
+    resultAsHtml += `
       <article>
         <h3>${title || 'Okänd titel'}</h3>
         <p><b>Fotograf:</b> ${author || 'Okänd fotograf'}</p>
@@ -188,17 +193,22 @@ async function pictureSearch() {
       </article>
     `;
   }
-  document.querySelector('.picture-search-result').innerHTML = html;
+  document.querySelector('.picture-search-result').innerHTML = resultAsHtml;
 }
 
+// ppt search
 async function pptSearch() {
   let inputField = document.querySelector('input[name="ppt-search"]');
-  if (!inputField || !inputField.value) return document.querySelector('.ppt-search-result').innerHTML = '';
+  if (!inputField || inputField.value === '') {
+    document.querySelector('.ppt-search-result').innerHTML = '';
+    return;
+  }
   let field = document.querySelector('select[name="ppt-meta-field"]').value;
-  let result = await (await fetch(`/api/powerpoint-search/${field}/${inputField.value}`)).json();
-  let html = '';
+  let rawResponse = await fetch(`/api/powerpoint-search/${field}/${inputField.value}`);
+  let result = await rawResponse.json();
+  let resultAsHtml = '';
   for (let { id, FileName, Title, Author } of result) {
-    html += `
+    resultAsHtml += `
       <article>
         <h3>${Title || 'Okänd titel'}</h3>
         <p><b>Skapare:</b> ${Author || 'Okänd skapare'}</p>
@@ -207,80 +217,5 @@ async function pptSearch() {
       </article>
     `;
   }
-  document.querySelector('.ppt-search-result').innerHTML = html;
-}
-
-/* ---------- Google Maps + GeoJSON ---------- */
-let _googleLoaded = false;
-let _mapInstance = null;
-let _mapInitializedForThisView = false;
-
-function loadGoogleMaps(apiKey) {
-  if (_googleLoaded && window.google && window.google.maps) return Promise.resolve(window.google);
-  return new Promise((resolve, reject) => {
-    window._onGoogleMapsLoaded = () => {
-      _googleLoaded = true;
-      resolve(window.google);
-    };
-    const script = document.createElement('script');
-    const key = 'DIN_FAKTISKA_GOOGLE_MAPS_API_KEY'; // Sätt din nyckel här
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=geometry&callback=_onGoogleMapsLoaded`;
-    script.async = true;
-    script.defer = true;
-    script.onerror = e => reject(e);
-    document.head.appendChild(script);
-  });
-}
-
-async function initMapEmbedded() {
-  if (_mapInitializedForThisView) return;
-  const mapEl = document.getElementById('map-fixed');
-  if (!mapEl) return;
-
-  const google = await loadGoogleMaps();
-
-  const center = { lat: 59.334591, lng: 18.06324 };
-  _mapInstance = new google.maps.Map(mapEl, { center, zoom: 12 });
-  const infoWindow = new google.maps.InfoWindow();
-
-  // Hämta geojson från backend
-  let geojson = null;
-  try {
-    const resp = await fetch('/api/pictures-geojson');
-    if (resp.ok) geojson = await resp.json();
-  } catch (e) {
-    console.warn('Kunde inte hämta geojson:', e);
-  }
-
-  if (!geojson) geojson = { type: 'FeatureCollection', features: [] };
-
-  _mapInstance.data.addGeoJson(geojson);
-  _mapInstance.data.setStyle(feature => {
-    const geomType = feature.getGeometry().getType();
-    const isPolygon = geomType.includes('Polygon');
-    return {
-      fillOpacity: isPolygon ? 0.2 : 0.0,
-      strokeWeight: isPolygon ? 2 : 1,
-      strokeColor: '#3367d6',
-      fillColor: '#3367d6',
-      icon: !isPolygon ? { path: google.maps.SymbolPath.CIRCLE, scale: 6, strokeWeight: 2 } : null
-    };
-  });
-
-  _mapInstance.data.addListener('click', e => {
-    const props = e.feature.getProperty('name') || 'Feature';
-    const more = e.feature.getProperty('info') || '';
-    infoWindow.setContent(`<div style="min-width:160px"><b>${props}</b><br/>${more}</div>`);
-    infoWindow.setPosition(e.latLng);
-    infoWindow.open(_mapInstance);
-  });
-
-  // Anpassa vy
-  const bounds = new google.maps.LatLngBounds();
-  _mapInstance.data.forEach(feature => {
-    feature.getGeometry().forEachLatLng(latLng => bounds.extend(latLng));
-  });
-  if (!bounds.isEmpty()) _mapInstance.fitBounds(bounds);
-
-  _mapInitializedForThisView = true;
+  document.querySelector('.ppt-search-result').innerHTML = resultAsHtml;
 }
