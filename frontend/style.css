@@ -25,6 +25,8 @@ header {
         color: #fff;
         text-decoration: none;
         font-family: 'Roboto';
+        margin-right: 20px;
+        /* 👈 lagt till mellanrum mellan rubrikerna */
     }
 }
 
@@ -118,33 +120,34 @@ label {
 }
 
 #map {
-  height: 60vh;
-  width: 50vw;
+    height: 60vh;
+    width: 50vw;
 }
 
 html,
 body {
-  height: 100%;
-  margin: 0;
-  padding: 20px;
-  font-size: 18px;
-  font-family: Verdana;
+    height: 100%;
+    margin: 0;
+    padding: 20px;
+    font-size: 18px;
+    font-family: Verdana;
 }
 
 select,
 button {
-  padding: 10px 20px;
-  margin-bottom: 20px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
 }
 
 article {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 img {
-  width: 50vw;
-  cursor: pointer;
+    width: 50vw;
+    cursor: pointer;
 }
+
 #map-fixed {
     position: fixed !important;
     right: 20px;
