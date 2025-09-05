@@ -4,7 +4,7 @@ export function pdfSearchPageContent() {
       <label>
         Sök på: <select name="pdf-meta-field">
           <option value="title">Pdftitel</option>
-          <option value="author">Författare</option>
+          <option value="author">Author</option>
         </select>
       </label>
       <label>
