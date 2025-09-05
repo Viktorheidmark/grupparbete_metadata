@@ -57,8 +57,8 @@ async function pictureSearch() {
   for (let { id, file, Make, Model } of result) {
     resultAsHtml += `
       <article>
-        <h2>${Make || 'Okänt märke'}<h2>
-        <h2>${Model || 'Okänd modell'}</h2>
+        <h2><b>Make: </b>${Make || 'unknown make'}<h2>
+        <h4><b>Model: </b>${Model || 'unknown model'}</h2>
         <img src="/data/pictures/${file}" alt="${file}" style="max-width:200px;">
         <p><a href="/data/pictures/${file}" download>Ladda ned bild</a></p>
         <p><button class="btn-show-all-picture-metadata" data-id="${id}">Visa all metadata</button></p>
