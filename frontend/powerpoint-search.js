@@ -1,14 +1,14 @@
 export function pptSearchPageContent() {
   return `
-      <h2>Sök powerpoint</h2>
+      <h2>Search powerpoint</h2>
       <label>
-        Sök på: <select name="ppt-meta-field">
+        Categories: <select name="ppt-meta-field">
           <option value="Company">Company</option>
-          <option value="Author">Författare</option>
+          <option value="Author">Author</option>
         </select>
       </label>
       <label>
-        <input name="ppt-search" type="text" placeholder="Sök bland ppt-filer">
+        <input name="ppt-search" type="text" placeholder="Search among ppt-files">
       </label>
       <section class="ppt-search-result"></section>
     `;
@@ -53,8 +53,8 @@ async function pptSearch() {
       <article>
         <h3>${Company || 'unknown Company'}</h3>
         <p><b>Author:</b> ${Author || 'unknown author'}</p>
-        <a href="/data/ppt/${FileName}" download>Ladda ned PowerPoint</a>
-        <p><button class="btn-show-all-ppt-metadata" data-id="${id}">Visa all metadata</button></p>
+        <a href="/data/ppt/${FileName}" download>download PowerPoint</a>
+        <p><button class="btn-show-all-ppt-metadata" data-id="${id}">Show all metadata</button></p>
       </article>
     `;
   }

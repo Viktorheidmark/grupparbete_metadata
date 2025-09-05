@@ -1,14 +1,14 @@
 export function pdfSearchPageContent() {
   return `
-      <h2>Sök pdf</h2>
+      <h2>Search pdf</h2>
       <label>
-        Sök på: <select name="pdf-meta-field">
+        Categories: <select name="pdf-meta-field">
           <option value="title">Pdftitel</option>
           <option value="author">Author</option>
         </select>
       </label>
       <label>
-        <input name="pdf-search" type="text" placeholder="Sök bland pdffiler">
+        <input name="pdf-search" type="text" placeholder="Search among pdffiles">
       </label>
       <section class="pdf-search-result"></section>
     `;
@@ -51,10 +51,10 @@ async function pdfSearch() {
   for (let { id, fileName, title, author } of result) {
     resultAsHtml += `
       <article>
-        <h2><b>Title: </b>${title || 'Okänd titel'}</h2>
-        <p><b>Författare:</b> ${author || 'unknown author'}</p>
-        <a href="/data/pdf/${fileName}" download>Ladda ned PDF</a>
-        <p><button class="btn-show-all-pdf-metadata" data-id="${id}">Visa all metadata</button></p>
+        <h2><b>Title: </b>${title || 'unknown title'}</h2>
+        <p><b>Author:</b> ${author || 'unknown author'}</p>
+        <a href="/data/pdf/${fileName}" download>download PDF</a>
+        <p><button class="btn-show-all-pdf-metadata" data-id="${id}">Show all metadata</button></p>
       </article>
     `;
   }
