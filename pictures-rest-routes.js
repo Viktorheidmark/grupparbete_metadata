@@ -30,5 +30,3 @@ export default function setupPicturesRestRoutes(app, db) {
   `, [id]);
         res.json(result);
     });
-
-}

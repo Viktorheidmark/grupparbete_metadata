@@ -21,7 +21,6 @@ async function main() {
   for (let file of files) {
     try {
       const fullPath = path.join(dir, file);
-
       // hämta metadata via exiftool
       const meta = await exiftool.read(fullPath);
 
