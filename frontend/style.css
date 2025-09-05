@@ -145,11 +145,11 @@ img {
   width: 50vw;
   cursor: pointer;
 }
-
 #map-fixed {
-  position: fixed !important;
-  right: 20px;
-  top: 20px;
-  width: 40vw;
-  height: 80vh;
+    position: fixed !important;
+    right: 20px;
+    top: 20px;
+    width: 40vw;
+    height: 80vh;
+    border: 1px solid #ccc;
 }
