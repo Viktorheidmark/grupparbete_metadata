@@ -51,7 +51,7 @@ async function pdfSearch() {
   for (let { id, fileName, title, author, subject } of result) {
     resultAsHtml += `
       <article>
-        <h3>${title || 'Okänd titel'}</h3>
+        <h3><b>Title: </b>${title || 'Okänd titel'}</h3>
         <p><b>Författare:</b> ${author || 'Okänd författare'}</p>
         <p><b>Ämne:</b> ${subject || 'Okänt ämne'}</p>
         <a href="/data/pdf/${fileName}" download>Ladda ned PDF</a>
