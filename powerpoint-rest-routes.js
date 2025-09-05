@@ -29,5 +29,3 @@ export default function setupPowerpointRestRoutes(app, db) {
   `, [id]);
     res.json(result);
   });
-
-}
