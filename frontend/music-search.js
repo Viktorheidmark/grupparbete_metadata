@@ -58,7 +58,7 @@ async function musicSearch() {
   for (let { id, fileName, title, artist, album, genre } of result) {
     resultAsHtml += `
       <article>
-        <h3>${artist || 'Okänd artist'}</h3>
+        <h3><b>Artist:</b>${artist || 'Okänd artist'}</h3>
         <h2>${title || 'Okänd titel'}</h2>
         <p><b>Från albumet:</b> ${album || 'Okänt album'}</p>
         <p><b>Genre:</b> ${genre || 'Okänd genre'}</p>
