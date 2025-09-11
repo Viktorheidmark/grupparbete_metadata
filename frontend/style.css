@@ -1,152 +1,182 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Permanent+Marker&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* Use box sizing - padding is included in widths */
+
 *,
 *:before,
 *:after {
     box-sizing: border-box;
 }
 
+
 body {
     margin: 0;
     font-size: 18px;
-    background-color: #eee;
-    font-family: 'Crimson Text';
+    background-color: #e6f2ff;
+
+    font-family: 'Crimson Text', serif;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    color: #333;
 }
+
 
 header {
-    background-color: #2f5703;
-    /* text-color */
+    background-color: #4da6ff;
+
     color: #fff;
-
     padding: 20px;
-
-    a {
-        color: #fff;
-        text-decoration: none;
-        font-family: 'Roboto';
-        margin-right: 20px;
-        /* 👈 lagt till mellanrum mellan rubrikerna */
-    }
 }
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+header a:hover {
+    color: #ffeb99;
+
+}
+
 
 .logo {
     font-size: 30px;
     margin-bottom: 10px;
-    font-family: 'Permanent Marker'
+    font-family: 'Permanent Marker', cursive;
 }
 
-nav {
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
 
-    li {
-        display: inline-block;
-        padding-right: 10px;
-    }
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
+
+nav li {
+    display: inline-block;
+    padding-right: 15px;
+}
+
 
 main {
-    max-width: 700px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #f0f8ff;
+
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
+
 footer {
-    background-color: #2f5703;
+    background-color: #4da6ff;
     color: #fff;
     padding: 20px;
     text-align: center;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
 }
 
-
-/* Sticky footer fix */
-body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-main {
-    flex: 1;
-}
 
 h1,
 h2,
 h3,
 h4 {
-    font-family: 'Roboto';
-    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    margin: 0 0 10px 0;
 }
+
 
 p {
-    margin: 0;
-    margin-bottom: 12px;
+    margin: 0 0 12px 0;
 }
 
+
 input[type="text"] {
-    width: 660px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
 }
+
 
 article {
     margin-top: 20px;
     padding: 20px;
-    border: 1px solid #999;
     border-radius: 10px;
+    background-color: #ffffff;
+    border: 1px solid #cce0ff;
+
+    transition: transform 0.2s;
+}
+
+article:hover {
+    transform: translateY(-2px);
 }
 
 article:nth-child(even) {
-    background-color: #eee;
+    background-color: #f0f8ff;
+
 }
 
 article h3 {
     font-variant: small-caps;
 }
 
+
 pre {
     overflow-x: auto;
     white-space: pre-wrap;
     font-size: 14px;
+    background-color: #e6f2ff;
+    padding: 10px;
+    border-radius: 6px;
 }
+
 
 label {
     display: block;
-    margin: 20px 0;
+    margin: 15px 0 5px 0;
 }
+
 
 #map {
     height: 60vh;
-    width: 50vw;
+    width: 100%;
+    border: 1px solid #cce0ff;
+    border-radius: 8px;
 }
 
-html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 20px;
-    font-size: 18px;
-    font-family: Verdana;
-}
 
 select,
 button {
     padding: 10px 20px;
     margin-bottom: 20px;
+    border-radius: 6px;
+    border: 1px solid #99c2ff;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
-article {
-    margin-top: 20px;
+button:hover,
+select:hover {
+    background-color: #e6f2ff;
+    border-color: #4da6ff;
 }
+
 
 img {
-    width: 50vw;
+    width: 100%;
     cursor: pointer;
+    border-radius: 8px;
 }
+
 
 #map-fixed {
     position: fixed !important;
@@ -154,5 +184,52 @@ img {
     top: 20px;
     width: 40vw;
     height: 80vh;
-    border: 1px solid #ccc;
+    border: 1px solid #cce0ff;
+    border-radius: 8px;
+}
+
+
+
+Sökcontainer som rektangel */ #search-container {
+    width: 500px;
+    /* bredare än hög */
+    height: 250px;
+    /* kortare höjd */
+    margin: 0 auto 20px auto;
+    display: flex;
+    flex-direction: column;
+    /* ändra till row om du vill ha input+knapp på samma rad */
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #cce0ff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Input + knapp inuti rektangeln */
+#search-container input[type="text"] {
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+#search-container button {
+    width: 50%;
+}
+
+/* Om du vill att input och knapp ska ligga bredvid varandra istället */
+#search-container.row {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#search-container.row input[type="text"] {
+    width: 65%;
+    margin-bottom: 0;
+}
+
+#search-container.row button {
+    width: 30%;
 }
