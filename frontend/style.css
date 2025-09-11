@@ -9,22 +9,24 @@
 body {
     margin: 0;
     font-size: 18px;
-    background-color: #e6f2ff;
+    background: linear-gradient(135deg, #e6f2ff, #ffffff);
     font-family: 'Crimson Text', serif;
     display: flex;
     min-height: 100vh;
     flex-direction: column;
     color: #333;
+    transition: background 0.5s ease;
 }
 
 header {
-    background-color: #4da6ff;
+    background: linear-gradient(90deg, #4da6ff, #1a8cff);
     color: #fff;
-    padding: 20px;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 header a {
@@ -32,30 +34,50 @@ header a {
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
     margin-right: 20px;
-    transition: color 0.3s;
+    position: relative;
+    transition: color 0.3s, transform 0.3s;
+}
+
+header a::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background: #ffeb99;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
 }
 
 header a:hover {
     color: #ffeb99;
+    transform: scale(1.1);
+}
+
+header a:hover::after {
+    width: 100%;
 }
 
 .logo {
-    font-size: 30px;
+    font-size: 36px;
     font-family: 'Permanent Marker', cursive;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 main {
     flex: 1;
-    padding: 20px;
+    padding: 40px 20px;
     width: 100%;
 }
 
 footer {
-    background-color: #4da6ff;
+    background: linear-gradient(90deg, #4da6ff, #1a8cff);
     color: #fff;
     padding: 20px;
     text-align: center;
     font-family: 'Roboto', sans-serif;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.15);
 }
 
 h1,
@@ -63,42 +85,54 @@ h2,
 h3,
 h4 {
     font-family: 'Roboto', sans-serif;
-    margin: 0 0 10px 0;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 p {
-    margin: 0 0 12px 0;
+    margin: 0 0 15px 0;
+    line-height: 1.6;
 }
 
 input[type="text"] {
     width: 100%;
-    padding: 10px;
-    border-radius: 6px;
+    padding: 12px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     margin-bottom: 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #4da6ff;
+    box-shadow: 0 0 8px rgba(77, 166, 255, 0.5);
+    outline: none;
 }
 
 #pictures-results,
 #music-results,
 #pdf-results {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
     width: 100%;
 }
 
 .card,
 article {
-    background-color: #ffffff;
+    background: linear-gradient(145deg, #ffffff, #f0f8ff);
     border: 1px solid #cce0ff;
-    border-radius: 10px;
-    padding: 20px;
-    transition: transform 0.2s;
+    border-radius: 15px;
+    padding: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover,
 article:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 article h3 {
@@ -109,45 +143,56 @@ pre {
     overflow-x: auto;
     white-space: pre-wrap;
     font-size: 14px;
-    background-color: #e6f2ff;
-    padding: 10px;
-    border-radius: 6px;
+    background-color: #e6f7ff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
 label {
     display: block;
-    margin: 15px 0 5px 0;
+    margin: 15px 0 8px 0;
 }
 
 #map {
     height: 60vh;
     width: 100%;
-    border: 1px solid #cce0ff;
-    border-radius: 8px;
+    border: 2px solid #99c2ff;
+    border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 select,
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     margin-bottom: 20px;
-    border-radius: 6px;
+    border-radius: 10px;
     border: 1px solid #99c2ff;
     background-color: #ffffff;
     cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 button:hover,
 select:hover {
-    background-color: #e6f2ff;
-    border-color: #4da6ff;
+    background-color: #4da6ff;
+    border-color: #1a8cff;
+    color: #fff;
+    transform: scale(1.05);
 }
 
 img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 12px;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
