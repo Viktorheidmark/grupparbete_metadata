@@ -6,9 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filsök: dm24-sthm-grupp3</title>
   <link rel="stylesheet" href="style.css">
+  
   <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"></script>
-
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+    async 
+    defer>
+    </script>
 </head>
 
 <body>
@@ -27,8 +31,13 @@
     <article>
       <!-- Bilder kommer att laddas här -->
     </article>
+     <!-- Map Container --> 
+    <map id="map" style="height: 400px; width: 100%; display: none;"></map>
+    <!-- Save Search Button -->
+    <button class="save-search">Save Search</button>
+
   </main>
-  <div id="map" style="height: 400px; width: 100%; display: none;"></div>
+  
   <footer>
     © 2025 dm24-sthm-grupp3
   </footer>

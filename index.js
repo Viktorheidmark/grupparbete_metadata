@@ -5,7 +5,7 @@ import setupMusicRestRoutes from './music-rest-routes.js';
 import setupPdfRestRoutes from './pdf-rest-routes.js';
 import setupPicturesRestRoutes from './pictures-rest-routes.js';
 import setupPowerpointRestRoutes from './powerpoint-rest-routes.js';
-
+import path from 'path';
 
 // connect to db
 const db = await mysql.createConnection(dbCredentials);
@@ -22,6 +22,11 @@ setupPowerpointRestRoutes(app, db);
 // Serve files from the frontend folder
 app.use(express.static('frontend'));
 
+//
+app.get('/*splat', (request, response) => {
+  response.sendFile(path.join(import.meta.dirname, 'frontend', 'index.html'))
+});
+  
 // Start the web server
 app.listen(3010, () => console.log('Listening on http://localhost:3010'));
 
