@@ -129,3 +129,6 @@ searchForUrlQuery();
 window.addEventListener('popstate', () => {
   searchForUrlQuery();
 });
+
+// Visa startsidan vid sidladdning
+showContent('start');
