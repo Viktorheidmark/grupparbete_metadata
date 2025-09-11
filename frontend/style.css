@@ -1,18 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Permanent+Marker&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-
 *,
 *:before,
 *:after {
     box-sizing: border-box;
 }
 
-
 body {
     margin: 0;
     font-size: 18px;
     background-color: #e6f2ff;
-
     font-family: 'Crimson Text', serif;
     display: flex;
     min-height: 100vh;
@@ -20,10 +17,8 @@ body {
     color: #333;
 }
 
-
 header {
     background-color: #4da6ff;
-
     color: #fff;
     padding: 20px;
 }
@@ -38,16 +33,13 @@ header a {
 
 header a:hover {
     color: #ffeb99;
-
 }
-
 
 .logo {
     font-size: 30px;
     margin-bottom: 10px;
     font-family: 'Permanent Marker', cursive;
 }
-
 
 nav ul {
     list-style-type: none;
@@ -60,18 +52,15 @@ nav li {
     padding-right: 15px;
 }
 
-
 main {
-    max-width: 900px;
+    max-width: 700px;
     margin: 20px auto;
     background-color: #f0f8ff;
-
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex: 1;
 }
-
 
 footer {
     background-color: #4da6ff;
@@ -81,7 +70,6 @@ footer {
     font-family: 'Roboto', sans-serif;
 }
 
-
 h1,
 h2,
 h3,
@@ -90,11 +78,9 @@ h4 {
     margin: 0 0 10px 0;
 }
 
-
 p {
     margin: 0 0 12px 0;
 }
-
 
 input[type="text"] {
     width: 100%;
@@ -104,14 +90,12 @@ input[type="text"] {
     margin-bottom: 20px;
 }
 
-
 article {
     margin-top: 20px;
     padding: 20px;
     border-radius: 10px;
     background-color: #ffffff;
     border: 1px solid #cce0ff;
-
     transition: transform 0.2s;
 }
 
@@ -121,13 +105,11 @@ article:hover {
 
 article:nth-child(even) {
     background-color: #f0f8ff;
-
 }
 
 article h3 {
     font-variant: small-caps;
 }
-
 
 pre {
     overflow-x: auto;
@@ -138,12 +120,10 @@ pre {
     border-radius: 6px;
 }
 
-
 label {
     display: block;
     margin: 15px 0 5px 0;
 }
-
 
 #map {
     height: 60vh;
@@ -151,7 +131,6 @@ label {
     border: 1px solid #cce0ff;
     border-radius: 8px;
 }
-
 
 select,
 button {
@@ -170,13 +149,11 @@ select:hover {
     border-color: #4da6ff;
 }
 
-
 img {
     width: 100%;
     cursor: pointer;
     border-radius: 8px;
 }
-
 
 #map-fixed {
     position: fixed !important;
@@ -186,50 +163,4 @@ img {
     height: 80vh;
     border: 1px solid #cce0ff;
     border-radius: 8px;
-}
-
-
-
-Sökcontainer som rektangel */ #search-container {
-    width: 500px;
-    /* bredare än hög */
-    height: 250px;
-    /* kortare höjd */
-    margin: 0 auto 20px auto;
-    display: flex;
-    flex-direction: column;
-    /* ändra till row om du vill ha input+knapp på samma rad */
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    border: 1px solid #cce0ff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Input + knapp inuti rektangeln */
-#search-container input[type="text"] {
-    width: 80%;
-    margin-bottom: 15px;
-}
-
-#search-container button {
-    width: 50%;
-}
-
-/* Om du vill att input och knapp ska ligga bredvid varandra istället */
-#search-container.row {
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#search-container.row input[type="text"] {
-    width: 65%;
-    margin-bottom: 0;
-}
-
-#search-container.row button {
-    width: 30%;
 }
