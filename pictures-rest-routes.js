@@ -21,7 +21,9 @@ export default function setupPicturesRestRoutes(app, db) {
         COALESCE(
           meta->>'$.metadata.Model',
           meta->>'$.metadata.model'
-        )                                  AS Model
+        )                                  AS Model,
+        meta->>'$.metadata.latitude'       AS latitude,
+        meta->>'$.metadata.longitude'      AS longitude
       FROM pictures
       WHERE LOWER(meta->>'$.metadata.${field}') LIKE LOWER(?)
     `, ['%' + searchValue + '%']);

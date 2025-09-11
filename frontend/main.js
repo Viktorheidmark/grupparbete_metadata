@@ -13,14 +13,15 @@ window.initMap = function () {
   });
 };
 // Nu kan vi använda Google Maps API
-let map; // Google Maps-instans
+window.map; // Google Maps-instans
 
 // Gör initMap global så att Google Maps API kan anropa den
 window.initMap = function () {
-  map = new google.maps.Map(document.getElementById('map'), {
+  window.map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 59.3293, lng: 18.0686 }, // Stockholm
     zoom: 10
   });
+  console.log(map)
 };
 
 
@@ -78,6 +79,7 @@ function showContent(page = 'start') {
 // Funktion för att ladda bilder och visa länkar till Google Maps
 async function loadImages() {
   try {
+    // Finns det en rest route /api/images, det verkar inte så!
     const response = await fetch('/api/images');
     const images = await response.json();
 
@@ -94,7 +96,8 @@ async function loadImages() {
 
     document.querySelector('article').innerHTML += html;
   } catch (err) {
-    console.error('Kunde inte ladda bilder:', err);
+    // Troligen error p.g.a. ej fungerande rest route
+    // console.error('Kunde inte ladda bilder:', err);
   }
 }
 
