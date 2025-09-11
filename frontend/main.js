@@ -54,18 +54,18 @@ function showContent(page = 'start') {
     html = startPageContent();
     saveButton.style.display = 'none';
   } else if (page === 'music') {
-    html = `<h1>Search Music</h1>${musicSearchPageContent()}`;
+    html = `<h1></h1>${musicSearchPageContent()}`;
     saveButton.style.display = 'block';
   } else if (page === 'pdf') {
-    html = `<h1>Search PDF</h1>${pdfSearchPageContent()}`;
+    html = `<h1></h1>${pdfSearchPageContent()}`;
     saveButton.style.display = 'block';
   } else if (page === 'pictures') {
-    html = `<h1>Search Pictures</h1>${picturesSearchPageContent()}`;
+    html = `<h1></h1>${picturesSearchPageContent()}`;
     saveButton.style.display = 'block';
     loadImages();
     mapDiv.style.display = 'block'; // Visa kartan bara här
   } else if (page === 'ppt') {
-    html = `<h1>Search PowerPoint</h1>${pptSearchPageContent()}`;
+    html = `<h1></h1>${pptSearchPageContent()}`;
     saveButton.style.display = 'block';
   } else {
     html = startPageContent();
