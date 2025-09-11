@@ -251,17 +251,6 @@ pre {
     margin: 1rem 0;
 }
 
-#map-fixed {
-    position: fixed !important;
-    right: 2rem;
-    top: 2rem;
-    width: 40vw;
-    height: 80vh;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    z-index: 1000;
-}
 
 /* Images */
 img {
@@ -321,14 +310,14 @@ a:hover {
         font-size: 2rem;
     }
     
-    #map-fixed {
-        position: relative !important;
-        right: auto;
-        top: auto;
-        width: 100%;
-        height: 40vh;
-        margin: 1rem 0;
-    }
+}
+
+#map {
+    position: fixed !important;
+    right: 20px;
+    top: 20px;
+    width: 30vw !important;
+    height: 40vh !important;
 }
 
 @media (max-width: 600px) {
@@ -349,3 +338,4 @@ a:hover {
         font-size: 1.75rem;
     }
 }
+
