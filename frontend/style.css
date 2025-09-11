@@ -21,6 +21,10 @@ header {
     background-color: #4da6ff;
     color: #fff;
     padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 header a {
@@ -37,29 +41,13 @@ header a:hover {
 
 .logo {
     font-size: 30px;
-    margin-bottom: 10px;
     font-family: 'Permanent Marker', cursive;
 }
 
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-nav li {
-    display: inline-block;
-    padding-right: 15px;
-}
-
 main {
-    max-width: 700px;
-    margin: 20px auto;
-    background-color: #f0f8ff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex: 1;
+    padding: 20px;
+    width: 100%;
 }
 
 footer {
@@ -90,21 +78,27 @@ input[type="text"] {
     margin-bottom: 20px;
 }
 
+#pictures-results,
+#music-results,
+#pdf-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.card,
 article {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
     background-color: #ffffff;
     border: 1px solid #cce0ff;
+    border-radius: 10px;
+    padding: 20px;
     transition: transform 0.2s;
 }
 
+.card:hover,
 article:hover {
-    transform: translateY(-2px);
-}
-
-article:nth-child(even) {
-    background-color: #f0f8ff;
+    transform: translateY(-3px);
 }
 
 article h3 {
@@ -130,6 +124,7 @@ label {
     width: 100%;
     border: 1px solid #cce0ff;
     border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 select,
@@ -151,16 +146,8 @@ select:hover {
 
 img {
     width: 100%;
-    cursor: pointer;
+    height: auto;
     border-radius: 8px;
-}
-
-#map-fixed {
-    position: fixed !important;
-    right: 20px;
-    top: 20px;
-    width: 40vw;
-    height: 80vh;
-    border: 1px solid #cce0ff;
-    border-radius: 8px;
+    display: block;
+    margin-bottom: 10px;
 }
