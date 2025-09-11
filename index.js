@@ -28,7 +28,7 @@ app.get('/*splat', (request, response) => {
 });
   
 // Start the web server
-app.listen(3010, () => console.log('Listening on http://localhost:3010'));
+app.listen(5173, () => console.log('Listening on http://localhost:5173'));
 
 
 // For the harder / more advanced example
