@@ -1,3 +1,5 @@
+// main.js
+
 // Ladda som ES-modul i index.html
 import { musicSearchPageContent } from './music-search.js';
 import { pdfSearchPageContent } from './pdf-search.js';
@@ -24,14 +26,12 @@ window.initMap = function () {
   console.log(map)
 };
 
-
 // Now "mount"/include Google Map script
 // (because now we are sure that initMap exists for Google's
 //  JavaScript to call)
 let script = document.createElement('script');
 script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly';
 document.body.append(script);
-
 
 // Meny – byt sida
 document.body.addEventListener('click', (e) => {
@@ -68,6 +68,11 @@ function showContent(page = 'start') {
   } else if (page === 'ppt') {
     html = `<h1></h1>${pptSearchPageContent()}`;
     saveButton.style.display = 'block';
+    // Kör en initial sökning (valfritt)
+    setTimeout(() => {
+      const evt = new Event('change');
+      document.querySelector('select[name="ppt-meta-field"]')?.dispatchEvent(evt);
+    }, 0);
   } else {
     html = startPageContent();
     saveButton.style.display = 'none';
@@ -79,7 +84,6 @@ function showContent(page = 'start') {
 // Funktion för att ladda bilder och visa länkar till Google Maps
 async function loadImages() {
   try {
-    // Finns det en rest route /api/images, det verkar inte så!
     const response = await fetch('/api/images');
     const images = await response.json();
 
@@ -106,8 +110,15 @@ document.body.addEventListener('click', (event) => {
   let saveButton = event.target.closest('.save-search');
   if (!saveButton) return;
 
-  const searchPhrase = document.querySelector('input[name="music-search"]')?.value || '';
-  const metaField = document.querySelector('select[name="music-meta-field"]')?.value || '';
+  const searchPhrase =
+    document.querySelector('input[name="music-search"]')?.value ||
+    document.querySelector('input[name="ppt-search"]')?.value ||
+    '';
+
+  const metaField =
+    document.querySelector('select[name="music-meta-field"]')?.value ||
+    document.querySelector('select[name="ppt-meta-field"]')?.value ||
+    '';
 
   if (!searchPhrase) {
     alert('No search phrase to save.');
@@ -126,14 +137,21 @@ function searchForUrlQuery() {
   const search = params.get('search') || '';
   const metaField = params.get('metaField') || '';
 
-  const inputField = document.querySelector('input[name="music-search"]');
-  const selectField = document.querySelector('select[name="music-meta-field"]');
-  if (inputField) inputField.value = search;
-  if (selectField) selectField.value = metaField;
+  const inputFieldMusic = document.querySelector('input[name="music-search"]');
+  const selectFieldMusic = document.querySelector('select[name="music-meta-field"]');
 
-  if (search) {
+  if (inputFieldMusic) inputFieldMusic.value = search;
+  if (selectFieldMusic) selectFieldMusic.value = metaField;
+
+  if (search && inputFieldMusic) {
     musicSearch();
   }
+
+  // Gör samma för ppt om vi är på ppt-sidan
+  const inputFieldPpt = document.querySelector('input[name="ppt-search"]');
+  const selectFieldPpt = document.querySelector('select[name="ppt-meta-field"]');
+  if (inputFieldPpt) inputFieldPpt.value = search;
+  if (selectFieldPpt) selectFieldPpt.value = metaField;
 }
 
 // Utför sökning vid sidladdning
