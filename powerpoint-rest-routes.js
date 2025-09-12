@@ -1,7 +1,7 @@
 export default function setupPowerpointRestRoutes(app, db) {
 
-  app.get('/api/powerpoint-search/:field/:searchValue', async (req, res) => {
-    let { field, searchValue } = req.params;
+  app.get('/api/powerpoint-search/:field/:minSize/:maxSize/:searchValue', async (req, res) => {
+    let { field, searchValue, minSize, maxSize } = req.params;
 
     // Tillåt bara dessa fält i UI:t
     if (!['Company', 'Author'].includes(field)) {
@@ -28,6 +28,10 @@ export default function setupPowerpointRestRoutes(app, db) {
       `;
     }
 
+    whereClause = `(${whereClause})` + 
+      ` AND CAST(SUBSTRING(meta->>'$.FileSize', 1, LENGTH(meta->>'$.FileSize')-3) AS UNSIGNED) >= ?` +
+      ` AND CAST(SUBSTRING(meta->>'$.FileSize', 1, LENGTH(meta->>'$.FileSize')-3) AS UNSIGNED) <= ?`;
+
     const [result] = await db.execute(
       `
       SELECT
@@ -41,14 +45,15 @@ export default function setupPowerpointRestRoutes(app, db) {
         COALESCE(
           meta->>'$.Author',
           meta->>'$.author'
-        ) AS Author
+        ) AS Author,
+        CAST(SUBSTRING(meta->>'$.FileSize', 1, LENGTH(meta->>'$.FileSize')-3) AS UNSIGNED) AS FileSize
       FROM powerpoint
       WHERE ${whereClause}
       `,
       // tre placeholders om Company, två om Author
-      field === 'Company'
+      [...(field === 'Company'
         ? Array(3).fill('%' + searchValue + '%')
-        : Array(2).fill('%' + searchValue + '%')
+        : Array(2).fill('%' + searchValue + '%')), minSize, maxSize]
     );
 
     res.json(result);
