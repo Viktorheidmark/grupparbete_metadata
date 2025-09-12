@@ -3,10 +3,10 @@ import exifr from 'exifr';
 import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
 
-// connect to db
+// skapa en DB-anslutning
 const db = await mysql.createConnection(dbCredentials);
 
-// read all files i mappen
+// läs alla filer i mappen
 const files = fs.readdirSync('./frontend/data/pictures');
 
 // töm tabellen (valfritt – bara om du vill börja om varje gång)
@@ -32,6 +32,6 @@ for (let file of files) {
   }
 }
 
-// Exit process when import is done
+// avsluta DB-anslutningen
 console.log('All metadata imported!');
 process.exit();

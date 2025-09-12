@@ -6,7 +6,7 @@ import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
 
 async function main() {
-  // connect to db
+  // skapa en DB-anslutning
   const db = await mysql.createConnection(dbCredentials);
 
   // var ligger filerna?
@@ -39,7 +39,7 @@ async function main() {
     }
   }
 
-  // Exit process when import is done
+  // avsluta DB-anslutningen
   console.log('All metadata imported!');
   await exiftool.end();
   process.exit();

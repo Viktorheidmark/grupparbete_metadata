@@ -1,3 +1,5 @@
+
+// pdf-search.js
 export function pdfSearchPageContent() {
   return `
       <h2>Search pdf</h2>
@@ -14,18 +16,21 @@ export function pdfSearchPageContent() {
     `;
 }
 
+// Lyssna på keyup i sökfältet
 document.body.addEventListener('keyup', event => {
   let inputField = event.target.closest('input[name="pdf-search"]');
   if (!inputField) { return; }
   pdfSearch();
 });
 
+// Lyssna på ändringar i select
 document.body.addEventListener('change', event => {
   let select = event.target.closest('select[name="pdf-meta-field"]');
   if (!select) { return; }
   pdfSearch();
 });
 
+// Visa all metadata på knapp-klick
 document.body.addEventListener('click', async event => {
   let button = event.target.closest('.btn-show-all-pdf-metadata');
   if (!button) { return; }
@@ -37,12 +42,14 @@ document.body.addEventListener('click', async event => {
   button.after(pre);
 });
 
+// Sök-funktion
 async function pdfSearch() {
   let inputField = document.querySelector('input[name="pdf-search"]');
   if (!inputField || inputField.value === '') {
     document.querySelector('.pdf-search-result').innerHTML = '';
     return;
   }
+  // Hämta valt fält och sökterm
   let field = document.querySelector('select[name="pdf-meta-field"]').value;
   let q = encodeURIComponent(inputField.value.trim());
   let rawResponse = await fetch(`/api/pdf-search/${field}/${q}`);

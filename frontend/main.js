@@ -10,30 +10,28 @@ import { startPageContent } from './start-page.js';
 // Gör initMap global
 window.initMap = function () {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 59.3293, lng: 18.0686 }, // Stockholm
+    center: { lat: 59.3293, lng: 18.0686 },
     zoom: 10
   });
 };
 // Nu kan vi använda Google Maps API
-window.map; // Google Maps-instans
+window.Map; // Google Maps-instans
 
 // Gör initMap global så att Google Maps API kan anropa den
 window.initMap = function () {
-  window.map = new google.maps.Map(document.getElementById('map'), {
+  window.Map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 59.3293, lng: 18.0686 }, // Stockholm
     zoom: 10
   });
   console.log(map)
 };
 
-// Now "mount"/include Google Map script
-// (because now we are sure that initMap exists for Google's
-//  JavaScript to call)
+// Ladda Google Maps API så att initMap kan anropas
 let script = document.createElement('script');
 script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly';
 document.body.append(script);
 
-// Meny – byt sida
+// Hantera navigering
 document.body.addEventListener('click', (e) => {
   const navLink = e.target.closest('header nav a');
   if (!navLink) return;
@@ -42,7 +40,7 @@ document.body.addEventListener('click', (e) => {
   const page = navLink.getAttribute('data-page') || 'start';
   showContent(page);
 });
-
+// Visa innehåll baserat på vald sida
 function showContent(page = 'start') {
   let html = '';
   const saveButton = document.querySelector('.save-search');
@@ -100,8 +98,7 @@ async function loadImages() {
 
     document.querySelector('article').innerHTML += html;
   } catch (err) {
-    // Troligen error p.g.a. ej fungerande rest route
-    // console.error('Kunde inte ladda bilder:', err);
+    // Hantera fel vid hämtning av bilder
   }
 }
 

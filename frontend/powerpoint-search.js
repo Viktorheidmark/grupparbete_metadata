@@ -33,7 +33,7 @@ export function pptSearchPageContent() {
   `;
 }
 
-/* --- Triggers --- */
+/* --- Hämta och visa bilder --- */
 
 // Sök när man skriver i textfältet
 document.body.addEventListener('keyup', (event) => {
@@ -83,7 +83,7 @@ async function pptSearch() {
   // Tillåt tomt sökord (då blir LIKE '%%' i backenden).
   const searchValue = encodeURIComponent((qInput?.value || '').trim());
 
-  // Defaults om användaren lämnar tomt
+  // Hantera min/max storlek 
   const minSize = Number(minInput?.value || 0);
   const maxSize = Number(maxInput?.value || 999999); // "praktiskt tak"
 
@@ -98,7 +98,7 @@ async function pptSearch() {
     console.error('Search failed', e);
   }
 
-  // Rendera
+  // Visa resultatet
   const container = document.querySelector('.ppt-search-result');
   if (!Array.isArray(result) || result.length === 0) {
     container.innerHTML = `<p>No results.</p>`;

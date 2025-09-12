@@ -1,4 +1,4 @@
-// A function to create the music search page content
+// music-search.js
 export function musicSearchPageContent() {
   return `
       <h2>Search music</h2>
@@ -17,21 +17,21 @@ export function musicSearchPageContent() {
     `;
 }
 
-// Listen to key up events
+// Hämta och visa bilder när sidan laddas
 document.body.addEventListener('keyup', event => {
   let inputField = event.target.closest('input[name="music-search"]');
   if (!inputField) { return; }
   musicSearch();
 });
 
-// Listen to select changes
+// Lyssna på ändringar i select-fältet
 document.body.addEventListener('change', event => {
   let select = event.target.closest('select[name="music-meta-field"]');
   if (!select) { return; }
   musicSearch();
 });
 
-// Show all metadata on click
+// Visa all metadata när knappen klickas
 document.body.addEventListener('click', async event => {
   let button = event.target.closest('.btn-show-all-music-metadata');
   if (!button) { return; }
