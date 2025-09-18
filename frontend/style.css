@@ -336,8 +336,9 @@ a:hover {
     position: fixed !important;
     right: 20px;
     top: 20px;
-    width: 30vw !important;
-    height: 40vh !important;
+    width: 25vw !important;
+    height: 30vh !important;
+    border-radius: 8px;
 }
 
 @media (max-width: 600px) {

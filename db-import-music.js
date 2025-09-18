@@ -3,20 +3,19 @@ import * as musicMetadata from 'music-metadata';
 import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
 
-// connect to db
+// Skapa en DB-anslutning
 const db = await mysql.createConnection(dbCredentials);
 
-// read all files
+// Läs alla filer i mappen
 const files = fs.readdirSync('./frontend/data/music');
 
-// remove all posts from the musicMeta
+// Töm tabellen (valfritt – bara om du vill börja om varje gång)
 await db.execute('DELETE FROM music');
 
 for (let file of files) {
-  // get all metadata
+  // Läs metadata med music-metadata
   let metadata = await musicMetadata.parseFile('./frontend/data/music/' + file);
-  // create cleaned up version with filename + metadata
-  // we want to import mysql
+  // Skapa ett objekt med filnamn + metadata
   let cleaned = { file, common: metadata.common, format: metadata.format };
 
   let [result] = await db.execute(`
@@ -26,6 +25,6 @@ for (let file of files) {
   console.log(file, result);
 }
 
-// Exit process when import is done
+// Avsluta DB-anslutningen
 console.log('All metadata imported!');
 process.exit(); 

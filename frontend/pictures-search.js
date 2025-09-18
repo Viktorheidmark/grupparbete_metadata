@@ -1,3 +1,4 @@
+// pictures-search.js
 export function picturesSearchPageContent() {
   return `
       <h2>Search pictures</h2>
@@ -54,12 +55,13 @@ async function pictureSearch() {
   let result = await rawResponse.json();
 
   let resultAsHtml = '';
-  for (let { id, file, Make, Model } of result) {
+  for (let { id, file, Make, Model, latitude, longitude } of result) {
     resultAsHtml += `
       <article>
         <h2><b>Make: </b>${Make || 'unknown make'}<h2>
         <h4><b>Model: </b>${Model || 'unknown model'}</h2>
-        <img src="/data/pictures/${file}" alt="${file}" style="max-width:200px;">
+        <img src="/data/pictures/${file}" alt="${file}" style="max-width:200px;" 
+         data-longitude="${longitude}" data-latitude="${latitude}">
         <p><a href="/data/pictures/${file}" download>download picture</a></p>
         <p><button class="btn-show-all-picture-metadata" data-id="${id}">Show all metadata</button></p>
       </article>
@@ -68,3 +70,25 @@ async function pictureSearch() {
 
   document.querySelector('.picture-search-result').innerHTML = resultAsHtml;
 }
+
+
+// Låt global variabel för markör så vi kan ta bort den gamla markören
+let marker;
+
+// Lyssna på klick på bilder för att sätta markör på kartan
+document.body.addEventListener('click', event => {
+  let img = event.target.closest('.picture-search-result img');
+  if (!img) { return; }
+  let longitude = +img.getAttribute('data-longitude');
+  let latitude = +img.getAttribute('data-latitude');
+  // Vi tar bort eventuell gammal markör
+  marker && marker.setMap(null);
+  // Sätt ny markör
+  marker = new google.maps.Marker({
+    map: window.Map,
+    position: { lat: latitude, lng: longitude },
+    title: ''
+  });
+  // Flytta kartan till markörens position
+  window.Map.panTo({ lat: latitude, lng: longitude });
+});
