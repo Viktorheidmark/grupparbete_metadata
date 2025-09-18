@@ -1,4 +1,3 @@
-// pictures-search.js
 export function picturesSearchPageContent() {
   return `
       <h2>Search pictures</h2>
@@ -60,7 +59,7 @@ async function pictureSearch() {
       <article>
         <h2><b>Make: </b>${Make || 'unknown make'}<h2>
         <h4><b>Model: </b>${Model || 'unknown model'}</h2>
-        <img src="/data/pictures/${file}" alt="${file}" style="max-width:200px;" 
+        <img src="/data/pictures/${file}" alt="${file}" style="max-width:200px;"
          data-longitude="${longitude}" data-latitude="${latitude}">
         <p><a href="/data/pictures/${file}" download>download picture</a></p>
         <p><button class="btn-show-all-picture-metadata" data-id="${id}">Show all metadata</button></p>
@@ -72,23 +71,25 @@ async function pictureSearch() {
 }
 
 
-// Låt global variabel för markör så vi kan ta bort den gamla markören
+// Create the marker variable outside the listener
+// so that it is available on next click
+// (where we can remove the previous marker)
 let marker;
 
-// Lyssna på klick på bilder för att sätta markör på kartan
+// Listen to clicks on the images
 document.body.addEventListener('click', event => {
   let img = event.target.closest('.picture-search-result img');
   if (!img) { return; }
   let longitude = +img.getAttribute('data-longitude');
   let latitude = +img.getAttribute('data-latitude');
-  // Vi tar bort eventuell gammal markör
+  // Remove previous marker if it exists
   marker && marker.setMap(null);
-  // Sätt ny markör
+  // Set a new marker
   marker = new google.maps.Marker({
-    map: window.Map,
+    map: window.map,
     position: { lat: latitude, lng: longitude },
     title: ''
   });
-  // Flytta kartan till markörens position
-  window.Map.panTo({ lat: latitude, lng: longitude });
+  // Pan to - pan the maker into view!
+  window.map.panTo({ lat: latitude, lng: longitude });
 });
