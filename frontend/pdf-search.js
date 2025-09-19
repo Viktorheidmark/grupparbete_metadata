@@ -8,7 +8,6 @@ export function pdfSearchPageContent() {
           <option value="title">Pdftitel</option>
           <option value="author">Author</option>
           <option value="text">Text</option>
-          <option value="all">All fields</option>
         </select>
       </label>
       <label>
